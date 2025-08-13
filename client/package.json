@@ -3,11 +3,14 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web",
-    "test": "jest --watchAll"
+    "start": "bun exec expo start",
+    "android": "bun exec expo start --android",
+    "ios": "bun exec expo start --ios",
+    "web": "bun exec expo start --web",
+    "lint": "bun exec expo lint",
+    "test": "bun test",
+    "build:android": "bun exec expo build:android",
+    "build:ios": "bun exec expo build:ios"
   },
   "jest": {
     "preset": "jest-expo"
@@ -15,7 +18,7 @@
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",
     "@react-navigation/native": "^7.1.6",
-    "expo": "~53.0.20",
+    "expo": "^53.0.20",
     "expo-font": "~13.3.2",
     "expo-linking": "~7.1.7",
     "expo-router": "~5.1.4",
