@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, Pressable } from "react-native";
 import { Link } from "expo-router";
 
 interface NavbarProps {
@@ -7,27 +7,34 @@ interface NavbarProps {
   onLogout: () => void;
 }
 const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, onLogout }) => (
-  <View className="flex-row justify-around items-center bg-gray-800 p-4 shadow-xl">
-    <Link href="/home">
-      <Text className="text-lg text-indigo-400 font-bold">Home</Text>
+  <View className="flex flex-row gap-x-4 justify-center items-center bg-gray-800 p-4 shadow-xl">
+    <Link href="/home" asChild>
+      <Pressable>
+        <Text className="text-lg text-indigo-400 font-bold px-2">Home</Text>
+      </Pressable>
     </Link>
-    <Link href="/about">
-      <Text className="text-lg text-indigo-400 font-bold">About</Text>
+    <Link href="/about" asChild>
+      <Pressable>
+        <Text className="text-lg text-indigo-400 font-bold px-2">About</Text>
+      </Pressable>
     </Link>
-    <Link href="/contact">
-      <Text className="text-lg text-indigo-400 font-bold">Contact</Text>
+    <Link href="/contact" asChild>
+      <Pressable>
+        <Text className="text-lg text-indigo-400 font-bold px-2">Contact</Text>
+      </Pressable>
     </Link>
     {isLoggedIn && (
-      <Link href="/todos">
-        <Text className="text-lg text-indigo-400 font-bold">Todos</Text>
+      <Link href="/todos" asChild>
+        <Pressable>
+          <Text className="text-lg text-indigo-400 font-bold px-2">Todos</Text>
+        </Pressable>
       </Link>
     )}
-    <Text
-      className={`text-lg font-bold ${isLoggedIn ? "text-red-400" : "text-green-400"}`}
-      onPress={isLoggedIn ? onLogout : undefined}
-    >
-      {isLoggedIn ? "Logout" : ""}
-    </Text>
+    <Pressable onPress={isLoggedIn ? onLogout : undefined}>
+      <Text className={`text-lg font-bold px-2 ${isLoggedIn ? "text-red-400" : "text-green-400"}`}>
+        {isLoggedIn ? "Logout" : ""}
+      </Text>
+    </Pressable>
   </View>
 );
 export default Navbar;

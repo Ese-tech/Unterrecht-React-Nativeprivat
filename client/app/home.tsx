@@ -34,7 +34,7 @@ export default function HomePage() {
       const res = await axios.post(`${API_URL}/auth/${endpoint}`, body);
       await AsyncStorage.setItem("token", res.data.token);
       setUser(res.data);
-      navigation.replace("todos");
+     
     } catch (e: any) {
       Alert.alert("Fehler", e.response?.data?.message || "Ein Fehler ist aufgetreten.");
     }

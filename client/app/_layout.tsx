@@ -1,5 +1,6 @@
 // client/app/_layout.tsx
-
+import 'nativewind';
+import '../global.css';
 import React, { useState, useEffect, createContext } from "react";
 import { Stack } from "expo-router";
 import Navbar from "../components/Navbar";
@@ -64,4 +65,8 @@ export default function RootLayout() {
       </Stack>
     </AuthContext.Provider>
   );
+}
+
+if (typeof window !== "undefined") {
+  require("../dist/output.css");
 }
