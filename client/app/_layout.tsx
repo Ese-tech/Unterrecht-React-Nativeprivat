@@ -1,11 +1,16 @@
 // client/app/_layout.tsx
 import 'nativewind';
 import '../global.css';
+import '../dist/output.css';
 import React, { useState, useEffect, createContext } from "react";
 import { Stack } from "expo-router";
 import Navbar from "../components/Navbar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 // import { useNavigation } from "@react-navigation/native";
+
+if (typeof window !== "undefined") {
+  require("../dist/output.css");
+}
 
 // Definiere den Typ für den Auth Context
 interface AuthContextType {
@@ -65,8 +70,4 @@ export default function RootLayout() {
       </Stack>
     </AuthContext.Provider>
   );
-}
-
-if (typeof window !== "undefined") {
-  require("../dist/output.css");
 }
