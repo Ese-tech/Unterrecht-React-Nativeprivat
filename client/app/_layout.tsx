@@ -1,6 +1,8 @@
 import React, { useState, useEffect, createContext } from "react";
-import { Slot, useRouter } from "expo-router";
+// ❗ RN vs WEB: Expo Router statt React Router  
+import { Stack } from "expo-router";
 import Navbar from "../components/Navbar";
+// ❗ RN vs WEB: AsyncStorage statt localStorage
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const AuthContext = createContext<{
@@ -10,10 +12,10 @@ export const AuthContext = createContext<{
 
 export default function RootLayout() {
   const [user, setUser] = useState<any>(null);
-  const router = useRouter();
 
   // Check Auth-Status beim Start
   useEffect(() => {
+    // ❗ RN vs WEB: AsyncStorage.getItem() ist async, localStorage.getItem() ist sync
     AsyncStorage.getItem("token").then((token) => {
       if (token) setUser({ token });
     });
@@ -21,13 +23,17 @@ export default function RootLayout() {
 
   // Navigation Handler für Navbar
   const handleNavigate = (page: string) => {
-    router.replace("/" + page);
+    // ❗ RN vs WEB: Expo Router Navigation wird über Links/Href gemacht
+    // TODO: Navigation implementieren mit expo-router Links
+    console.log("Navigate to:", page);
   };
 
   const handleLogout = async () => {
+    // ❗ RN vs WEB: AsyncStorage.removeItem() statt localStorage.removeItem()
     await AsyncStorage.removeItem("token");
     setUser(null);
-    router.replace("/home");
+    // TODO: Navigation implementieren mit expo-router
+    console.log("Logout complete");
   };
 
   return (
@@ -37,7 +43,8 @@ export default function RootLayout() {
         onNavigate={handleNavigate}
         onLogout={handleLogout}
       />
-      <Slot />
+      {/* ❗ RN vs WEB: <Stack> für Screen-Navigation (statt React Router Outlet) */}
+      <Stack screenOptions={{ headerShown: false }} />
     </AuthContext.Provider>
   );
 }

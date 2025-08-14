@@ -3,11 +3,9 @@
 
 import type { Request, Response, NextFunction } from "express";
 import createHttpError from "http-errors";
-import config from "../config/config.js";
 import jwt from "jsonwebtoken";
-import type { JwtPayload } from "../types/jwt.js";
-
-const secret = config.JWT_SECRET;
+import type { JwtPayload } from "../types/jwt";
+import { JWT_SECRET } from "../utils/jwtConfig";
 
 export async function verifyToken(
   req: Request,
@@ -22,17 +20,22 @@ export async function verifyToken(
     }
     const token = authHeader.split(" ")[1];
 
-    if (!secret) {
-      throw new Error("Ungültiges ENV-Variable");
+    // JWT verifizieren und typisieren - mit @ts-ignore für TypeScript-Konflikt
+    // @ts-ignore
+    const decoded = jwt.verify(token, JWT_SECRET);
+    
+    // Type-Guard für das Payload
+    if (typeof decoded === "object" && decoded && "id" in decoded) {
+      req.user = decoded as JwtPayload;
+      return next();
+    } else {
+      throw createHttpError(401, "Token-Format ungültig");
     }
-
-    const payload = jwt.verify(token, secret) as JwtPayload;
-
-    req.user = payload; // !WICHTIG für die kommende Route
-
-    return next();
   } catch (error) {
-    return next(createHttpError(401, "Token ungültig"));
+    if (error instanceof jwt.JsonWebTokenError) {
+      return next(createHttpError(401, "Token ungültig"));
+    }
+    return next(error);
   }
 }
 

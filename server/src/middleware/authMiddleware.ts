@@ -3,7 +3,6 @@
 import type { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import config from '../config/config';
-import { get } from 'mongoose';
 
 // 1. Definiere das Interface für das Benutzer-Payload im Token
 //    Dieses Interface wird benötigt, um die Daten im JWT-Token zu typisieren
@@ -13,6 +12,7 @@ interface UserPayload {
   roles?: string[];
   permissions?: string[];
 }
+
 // 2. Erweitere das Express Request-Objekt, um das 'user'-Feld hinzuzufügen
 //    Dies ermöglicht es uns, in späteren Routen auf `req.user` zuzugreifen.
 declare global {
@@ -31,7 +31,15 @@ const protect = (req: Request, res: Response, next: NextFunction) => {
         try {
             token = req.headers.authorization.split(' ')[1];
             
-            const decoded = jwt.verify(token, config.JWT_SECRET as string);
+            // JWT_SECRET direkt aus process.env verwenden
+            const jwtSecret = process.env.JWT_SECRET;
+            if (!jwtSecret) {
+                res.status(500).json({ message: 'JWT_SECRET nicht konfiguriert' });
+                return;
+            }
+            
+            // @ts-ignore
+            const decoded = jwt.verify(token, jwtSecret);
         
 
             // Type-Check: Ist decoded ein Objekt und hat es ein id-Feld?
