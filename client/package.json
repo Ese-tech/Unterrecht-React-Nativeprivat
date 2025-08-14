@@ -10,8 +10,7 @@
     "lint": "bun exec expo lint",
     "test": "bun test",
     "build:android": "bun exec expo build:android",
-    "build:ios": "bun exec expo build:ios",
-    "build:css": "tailwindcss -i ./global.css -o ./dist/output.css --watch"
+    "build:ios": "bun exec expo build:ios"
   },
   "jest": {
     "preset": "jest-expo"
