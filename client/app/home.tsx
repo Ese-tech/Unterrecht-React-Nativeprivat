@@ -43,7 +43,7 @@ export default function HomePage() {
   // if (user) {
   //   navigation.replace("todos");
   //   return null;
-  }
+  // }
 
   return (
     <ImageBackground

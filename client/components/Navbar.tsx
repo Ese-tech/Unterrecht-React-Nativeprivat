@@ -1,32 +1,33 @@
 import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
-// ❗ RN vs WEB: NativeWind für Tailwind CSS in React Native
+import { View, Text } from "react-native";
+import { Link } from "expo-router";
+
 interface NavbarProps {
   isLoggedIn: boolean;
-  onNavigate: (page: string) => void;
   onLogout: () => void;
 }
-const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, onNavigate, onLogout }) => (
+const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, onLogout }) => (
   <View className="flex-row justify-around items-center bg-gray-800 p-4 shadow-xl">
-    <TouchableOpacity onPress={() => onNavigate("home")}>
+    <Link href="/home">
       <Text className="text-lg text-indigo-400 font-bold">Home</Text>
-    </TouchableOpacity>
-    <TouchableOpacity onPress={() => onNavigate("about")}>
+    </Link>
+    <Link href="/about">
       <Text className="text-lg text-indigo-400 font-bold">About</Text>
-    </TouchableOpacity>
-    <TouchableOpacity onPress={() => onNavigate("contact")}>
+    </Link>
+    <Link href="/contact">
       <Text className="text-lg text-indigo-400 font-bold">Contact</Text>
-    </TouchableOpacity>
+    </Link>
     {isLoggedIn && (
-      <TouchableOpacity onPress={() => onNavigate("todos")}>
+      <Link href="/todos">
         <Text className="text-lg text-indigo-400 font-bold">Todos</Text>
-      </TouchableOpacity>
+      </Link>
     )}
-    <TouchableOpacity onPress={isLoggedIn ? onLogout : () => onNavigate("home")}>
-      <Text className={`text-lg font-bold ${isLoggedIn ? "text-red-400" : "text-green-400"}`}>
-        {isLoggedIn ? "Logout" : "Login"}
-      </Text>
-    </TouchableOpacity>
+    <Text
+      className={`text-lg font-bold ${isLoggedIn ? "text-red-400" : "text-green-400"}`}
+      onPress={isLoggedIn ? onLogout : undefined}
+    >
+      {isLoggedIn ? "Logout" : ""}
+    </Text>
   </View>
 );
 export default Navbar;
