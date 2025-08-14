@@ -1,6 +1,8 @@
+//server/src/routes/authRouter.ts
+
 import { Router } from "express";
-import * as authController from "../controllers/authController.js";
-import { verifyToken } from "../middleware/verifyToken.js";
+import * as authController from "../controllers/authController";
+import { verifyToken } from "../middleware/verifyToken";
 
 const router = Router();
 

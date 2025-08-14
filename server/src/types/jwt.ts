@@ -1,7 +1,7 @@
 // types/jwt.ts
 export interface JwtPayload {
-  _id?: string;
-  email?: string;
+  id: string;
   roles?: string[];
   permissions?: string[];
+  // weitere Felder falls nötig
 }

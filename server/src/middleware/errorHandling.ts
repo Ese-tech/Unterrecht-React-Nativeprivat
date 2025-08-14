@@ -1,4 +1,7 @@
- import type{ Request, Response, NextFunction } from "express";
+
+//server/src/middleware/errorHandling.ts
+
+import type{ Request, Response, NextFunction } from "express";
 
 export const errorHandling = (
     err: any,

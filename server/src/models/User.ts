@@ -1,6 +1,6 @@
  // server/models/User.ts
 
- import { Schema, model, InferSchemaType } from "mongoose";
+ import  { Schema, model, type InferSchemaType } from "mongoose";
  import validator from "validator";
  import { hash } from "bcrypt-ts";
 

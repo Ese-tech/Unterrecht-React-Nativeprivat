@@ -1,8 +1,8 @@
 import { Router } from "express";
-import * as userController from "../controllers/userController.js";
-import { checkRole } from "../middleware/checkRole.js";
-import { checkPermission } from "../middleware/checkPermission.js";
-import { verifyToken } from "../middleware/verifyToken.js";
+import * as userController from "../controllers/userController";
+import { checkRole } from "../middleware/checkRole";
+import { checkPermission } from "../middleware/checkPermission";
+import { verifyToken } from "../middleware/verifyToken";
 
 const router = Router();
 

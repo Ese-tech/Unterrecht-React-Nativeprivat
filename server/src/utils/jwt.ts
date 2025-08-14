@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
 import config from "../config/config.js";
 import createHttpError from "http-errors";
-import { UserType } from "../types/user.js";
-import { JwtPayload } from "../types/jwt.js";
+import type { UserType } from "../types/user.js";
+import type { JwtPayload } from "../types/jwt.js";
 const secret = config.JWT_SECRET;
 
 // Funktion als generischer Schreiben
