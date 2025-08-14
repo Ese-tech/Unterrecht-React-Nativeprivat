@@ -1,8 +1,16 @@
 {
   "name": "server",
-  "module": "index.ts",
+  "module": "server.ts",
   "type": "module",
   "private": true,
+  "scripts": {
+    "dev": "bun --watch src/server.ts",
+    "start": "bun src/server.ts",
+    "build": "bun build src/server.ts --outdir dist",
+    "test": "bun test",
+    "lint": "eslint src/**/*.ts",
+    "format": "prettier --write src/**/*.ts"
+  },
   "devDependencies": {
     "@types/bun": "latest",
     "@types/cookie-parser": "^1.4.9",

@@ -13,7 +13,7 @@ function getEnvVar(key: string, required: boolean = true): string {
   if (required && !value) {
     throw new Error(`Umgebungsvariable ${key} ist nicht gesetzt.`);
   }
-  return value as string; // Type assertion da wir required prüfen
+  return value!;
 }
 
 const config: Config = {
@@ -23,5 +23,4 @@ const config: Config = {
   JWT_SECRET: getEnvVar("JWT_SECRET"),
 };
 
-// Type assertion für bessere TypeScript-Unterstützung
-export default config as Config;
+export default config;

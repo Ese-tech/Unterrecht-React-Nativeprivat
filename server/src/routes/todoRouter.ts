@@ -8,7 +8,7 @@ import {
     deleteTodo,
     toggleTodoCompletion
 } from '../controllers/todoController';
-import { verifyToken } from '../middleware/verifyToken';
+import protect from '../middleware/authMiddleware';
 
 const router = Router();
 
@@ -16,18 +16,18 @@ const router = Router();
 // mit einem gültigen JWT-Token.
 
 // GET-Anfrage, um alle To-Dos des angemeldeten Benutzers abzurufen
-router.get('/', verifyToken, getTodos);
+router.get('/', protect, getTodos);
 
 // POST-Anfrage, um ein neues To-Do zu erstellen
-router.post('/', verifyToken, addTodo);
+router.post('/', protect, addTodo);
 
 // PUT-Anfrage, um ein To-Do zu aktualisieren (z. B. den Text oder den Status)
-router.put('/:id', verifyToken, updateTodo);
+router.put('/:id', protect, updateTodo);
 
 // DELETE-Anfrage, um ein To-Do zu löschen
-router.delete('/:id', verifyToken, deleteTodo);
+router.delete('/:id', protect, deleteTodo);
 
 // PUT-Anfrage, um den "completed"-Status eines To-Dos umzuschalten
-router.put('/toggle/:id', verifyToken, toggleTodoCompletion);
+router.put('/toggle/:id', protect, toggleTodoCompletion);
 
 export default router;

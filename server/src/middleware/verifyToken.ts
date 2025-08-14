@@ -1,11 +1,8 @@
-
-//server/src/middleware/verifyToken.ts
-
 import type { Request, Response, NextFunction } from "express";
 import createHttpError from "http-errors";
+import config from "../config/config.js";
 import jwt from "jsonwebtoken";
-import type { JwtPayload } from "../types/jwt";
-import { JWT_SECRET } from "../utils/jwtConfig";
+import type { JwtPayload } from "../types/jwt.js";
 
 export async function verifyToken(
   req: Request,
@@ -20,25 +17,24 @@ export async function verifyToken(
     }
     const token = authHeader.split(" ")[1];
 
-    // JWT verifizieren und typisieren - mit @ts-ignore für TypeScript-Konflikt
-    // @ts-ignore
-    const decoded = jwt.verify(token, JWT_SECRET);
-    
-    // Type-Guard für das Payload
-    if (typeof decoded === "object" && decoded && "id" in decoded) {
-      req.user = decoded as JwtPayload;
+    // ❗ FIXED: JWT_SECRET Validierung BEVOR jwt.verify()
+    if (!config.JWT_SECRET) {
+      throw createHttpError(500, "Server-Konfigurationsfehler: JWT_SECRET nicht gesetzt");
+    }
+
+    const payload = jwt.verify(token, config.JWT_SECRET);
+
+    // ❗ FIXED: Bessere Type-Prüfung für JWT Payload
+    if (typeof payload === "object" && payload && "id" in payload) {
+      req.user = payload as JwtPayload;
       return next();
     } else {
-      throw createHttpError(401, "Token-Format ungültig");
+      throw createHttpError(401, "Token ungültig - fehlendes ID-Feld");
     }
   } catch (error) {
-    if (error instanceof jwt.JsonWebTokenError) {
-      return next(createHttpError(401, "Token ungültig"));
-    }
-    return next(error);
+    return next(createHttpError(401, "Token ungültig"));
   }
 }
-
 /* 
 #
 try {

@@ -31,16 +31,12 @@ const protect = (req: Request, res: Response, next: NextFunction) => {
         try {
             token = req.headers.authorization.split(' ')[1];
             
-            // JWT_SECRET direkt aus process.env verwenden
-            const jwtSecret = process.env.JWT_SECRET;
-            if (!jwtSecret) {
-                res.status(500).json({ message: 'JWT_SECRET nicht konfiguriert' });
-                return;
+            // ❗ FIXED: JWT_SECRET Validierung BEVOR jwt.verify()
+            if (!config.JWT_SECRET) {
+                return res.status(500).json({ message: 'Server-Konfigurationsfehler' });
             }
             
-            // @ts-ignore
-            const decoded = jwt.verify(token, jwtSecret);
-        
+            const decoded = jwt.verify(token, config.JWT_SECRET);
 
             // Type-Check: Ist decoded ein Objekt und hat es ein id-Feld?
             if (typeof decoded === "object" && decoded && "id" in decoded) {
@@ -57,6 +53,5 @@ const protect = (req: Request, res: Response, next: NextFunction) => {
 
     res.status(401).json({ message: 'Nicht autorisiert, kein Token' });
 };
-
 
 export default protect;

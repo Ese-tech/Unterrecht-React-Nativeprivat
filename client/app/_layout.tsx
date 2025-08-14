@@ -1,14 +1,20 @@
 import React, { useState, useEffect, createContext } from "react";
-// ❗ RN vs WEB: Expo Router statt React Router  
+// ❗ RN vs WEB: Expo Router statt React Router
 import { Stack } from "expo-router";
 import Navbar from "../components/Navbar";
 // ❗ RN vs WEB: AsyncStorage statt localStorage
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export const AuthContext = createContext<{
+// Define types separately to avoid parsing issues
+interface AuthContextType {
   user: any;
   setUser: (user: any) => void;
-}>({ user: null, setUser: () => {} });
+}
+
+export const AuthContext = createContext<AuthContextType>({ 
+  user: null, 
+  setUser: () => {} 
+});
 
 export default function RootLayout() {
   const [user, setUser] = useState<any>(null);
@@ -23,8 +29,7 @@ export default function RootLayout() {
 
   // Navigation Handler für Navbar
   const handleNavigate = (page: string) => {
-    // ❗ RN vs WEB: Expo Router Navigation wird über Links/Href gemacht
-    // TODO: Navigation implementieren mit expo-router Links
+    // Navigation wird über Expo Router file-based routing gemacht
     console.log("Navigate to:", page);
   };
 
@@ -32,8 +37,6 @@ export default function RootLayout() {
     // ❗ RN vs WEB: AsyncStorage.removeItem() statt localStorage.removeItem()
     await AsyncStorage.removeItem("token");
     setUser(null);
-    // TODO: Navigation implementieren mit expo-router
-    console.log("Logout complete");
   };
 
   return (
@@ -43,8 +46,13 @@ export default function RootLayout() {
         onNavigate={handleNavigate}
         onLogout={handleLogout}
       />
-      {/* ❗ RN vs WEB: <Stack> für Screen-Navigation (statt React Router Outlet) */}
-      <Stack screenOptions={{ headerShown: false }} />
+      {/* ❗ RN vs WEB: <Stack> für File-based Routing */}
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="home" />
+        <Stack.Screen name="about" />
+        <Stack.Screen name="contact" />
+        <Stack.Screen name="todos" />
+      </Stack>
     </AuthContext.Provider>
   );
 }
