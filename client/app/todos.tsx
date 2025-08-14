@@ -5,12 +5,12 @@ import { AuthContext } from "./_layout";
 import TodoList from "../components/TodoList";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useRouter } from "expo-router"; // Change this import
+import { router } from "expo-router";
+
 
 const API_URL = "http://localhost:5000/api";
 
 export default function TodosPage() {
-  const router = useRouter(); // Use the hook
   const { user, isLoading } = useContext(AuthContext);
   const [todos, setTodos] = useState<any[]>([]);
   const [newTodo, setNewTodo] = useState("");

@@ -6,12 +6,11 @@ import { AuthContext } from "./_layout";
 import LoginForm from "../components/LoginForm";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useRouter } from "expo-router";
+import { router } from "expo-router";
 
 const API_URL = "http://localhost:5000/api";
 
 export default function HomePage() {
-  const router = useRouter(); // Use the hook correctly
   const { user, setUser } = useContext(AuthContext);
   const [isLogin, setIsLogin] = useState(true);
   const [username, setUsername] = useState("");
