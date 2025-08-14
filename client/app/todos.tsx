@@ -5,7 +5,7 @@ import { AuthContext } from "./_layout";
 import TodoList from "../components/TodoList";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { router } from "expo-router";
+import { router, useNavigation } from "expo-router";
 
 
 const API_URL = "http://localhost:5000/api";
@@ -15,6 +15,7 @@ export default function TodosPage() {
   const [todos, setTodos] = useState<any[]>([]);
   const [newTodo, setNewTodo] = useState("");
   const [isFetchingTodos, setIsFetchingTodos] = useState(true);
+  const navigation = useNavigation();
 
   useEffect(() => {
     if (!isLoading) {

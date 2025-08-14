@@ -6,7 +6,7 @@ import { AuthContext } from "./_layout";
 import LoginForm from "../components/LoginForm";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { router } from "expo-router";
+import { useNavigation } from "@react-navigation/native";
 
 const API_URL = "http://localhost:5000/api";
 
@@ -17,6 +17,7 @@ export default function HomePage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const formOpacity = useRef(new Animated.Value(0)).current;
+  const navigation = useNavigation();
 
   React.useEffect(() => {
     Animated.timing(formOpacity, {
@@ -33,18 +34,16 @@ export default function HomePage() {
       const res = await axios.post(`${API_URL}/auth/${endpoint}`, body);
       await AsyncStorage.setItem("token", res.data.token);
       setUser(res.data);
-      router.replace("/todos"); // Use router instance, not useRouter
+      navigation.replace("todos");
     } catch (e: any) {
       Alert.alert("Fehler", e.response?.data?.message || "Ein Fehler ist aufgetreten.");
     }
   };
 
-  if (user) {
-    router.replace("/todos"); // Use router instance, not useRouter
-    return null;
+  // if (user) {
+  //   navigation.replace("todos");
+  //   return null;
   }
-
-  // ...existing code...
 
   return (
     <ImageBackground

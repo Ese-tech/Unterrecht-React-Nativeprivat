@@ -1,10 +1,13 @@
 import { useEffect } from "react";
-import  router  from "expo-router";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Index() {
+  const navigation = useNavigation();
+
   useEffect(() => {
-    router.replace("/home");
-    router.replace("/todos");
-  }, []);
+    // Replace the current route with "home"
+    navigation.replace("home");
+  }, [navigation]);
+
   return null;
 }
