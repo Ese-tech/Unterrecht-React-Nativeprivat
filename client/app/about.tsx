@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Platform } from "react-native";
 
 export default function AboutPage() {
   return (
@@ -19,18 +19,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F1F5F9', // Light background
-    padding: 32,
+    padding: Platform.OS === 'web' ? 32 : 24,
   },
   title: {
-    fontSize: 36,
+    fontSize: Platform.OS === 'web' ? 36 : 32,
     fontWeight: 'bold',
     color: '#4F46E5', // Purple
-    marginBottom: 16,
+    marginBottom: Platform.OS === 'web' ? 16 : 12,
+    textAlign: 'center',
   },
   description: {
-    fontSize: 18,
+    fontSize: Platform.OS === 'web' ? 18 : 17,
     color: '#475569', // Dark gray
     textAlign: 'center',
-    lineHeight: 26,
+    lineHeight: Platform.OS === 'web' ? 26 : 24,
+    maxWidth: Platform.OS === 'web' ? 600 : '100%',
   },
 });

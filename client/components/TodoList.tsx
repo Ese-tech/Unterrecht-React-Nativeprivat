@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Platform } from "react-native";
 
 interface Todo {
   _id: string;
@@ -90,19 +90,23 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 16,
-    paddingLeft: 16,
-    paddingRight: 12,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
+    paddingVertical: Platform.OS === 'web' ? 16 : 14,
+    paddingLeft: Platform.OS === 'web' ? 16 : 14,
+    paddingRight: Platform.OS === 'web' ? 12 : 10,
     elevation: 3,
     borderLeftWidth: 4,
     borderLeftColor: "#4F46E5",
+    ...(Platform.OS === 'web' ? {
+      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+    } : {
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.1,
+      shadowRadius: 8,
+    }),
   },
   todoContent: {
     flex: 1,
@@ -110,46 +114,46 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   checkbox: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
+    width: Platform.OS === 'web' ? 24 : 28,
+    height: Platform.OS === 'web' ? 24 : 28,
+    borderRadius: Platform.OS === 'web' ? 12 : 14,
     borderWidth: 2,
     borderColor: "#4F46E5",
-    marginRight: 12,
+    marginRight: Platform.OS === 'web' ? 12 : 14,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#FFFFFF",
   },
   checkmark: {
     color: "#4F46E5",
-    fontSize: 16,
+    fontSize: Platform.OS === 'web' ? 16 : 18,
     fontWeight: "bold",
   },
   textContainer: {
     flex: 1,
-    marginRight: 12,
+    marginRight: Platform.OS === 'web' ? 12 : 10,
   },
   todoText: {
-    fontSize: 16,
+    fontSize: Platform.OS === 'web' ? 16 : 16,
     fontWeight: "500",
     color: "#2D3748",
     marginBottom: 4,
-    lineHeight: 22,
+    lineHeight: Platform.OS === 'web' ? 22 : 24,
   },
   completedText: {
     textDecorationLine: "line-through",
     color: "#A0AEC0",
   },
   dateText: {
-    fontSize: 12,
+    fontSize: Platform.OS === 'web' ? 12 : 13,
     color: "#718096",
     fontWeight: "400",
   },
   statusBadge: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    paddingHorizontal: Platform.OS === 'web' ? 8 : 10,
+    paddingVertical: Platform.OS === 'web' ? 4 : 6,
     borderRadius: 12,
-    minWidth: 60,
+    minWidth: Platform.OS === 'web' ? 60 : 70,
     alignItems: "center",
   },
   completedBadge: {
@@ -163,7 +167,7 @@ const styles = StyleSheet.create({
     borderColor: "#F59E0B",
   },
   statusText: {
-    fontSize: 11,
+    fontSize: Platform.OS === 'web' ? 11 : 12,
     fontWeight: "600",
     textTransform: "uppercase",
   },
@@ -174,10 +178,10 @@ const styles = StyleSheet.create({
     color: "#D97706",
   },
   deleteButton: {
-    marginLeft: 8,
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    marginLeft: Platform.OS === 'web' ? 8 : 10,
+    width: Platform.OS === 'web' ? 36 : 40,
+    height: Platform.OS === 'web' ? 36 : 40,
+    borderRadius: Platform.OS === 'web' ? 18 : 20,
     backgroundColor: "#FEE2E2",
     justifyContent: "center",
     alignItems: "center",
@@ -185,7 +189,7 @@ const styles = StyleSheet.create({
     borderColor: "#F87171",
   },
   deleteButtonText: {
-    fontSize: 16,
+    fontSize: Platform.OS === 'web' ? 16 : 18,
   },
 });
 

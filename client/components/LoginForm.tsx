@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Animated, StyleSheet } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Animated, StyleSheet, Platform } from "react-native";
 // ❗ RN vs WEB: NativeWind für Tailwind CSS in React Native
 
 interface LoginFormProps {
@@ -19,31 +19,36 @@ interface LoginFormProps {
 const styles = StyleSheet.create({
   formContainer: {
     width: '100%',
-    maxWidth: 400,
+    maxWidth: Platform.OS === 'web' ? 400 : '90%',
     backgroundColor: '#FFFFFF',
     borderRadius: 20,
-    padding: 32,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 10,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 30,
+    padding: Platform.OS === 'web' ? 32 : 24,
     elevation: 15,
     borderWidth: 1,
     borderColor: '#E2E8F0',
+    marginHorizontal: Platform.OS === 'web' ? 0 : 20,
+    ...(Platform.OS === 'web' ? {
+      boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
+    } : {
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 10,
+      },
+      shadowOpacity: 0.1,
+      shadowRadius: 30,
+    }),
   },
   title: {
-    fontSize: 32,
+    fontSize: Platform.OS === 'web' ? 32 : 28,
     fontWeight: 'bold',
     color: '#4F46E5',
-    marginBottom: 32,
+    marginBottom: Platform.OS === 'web' ? 32 : 24,
     textAlign: 'center',
   },
   inputStyle: {
     width: '100%',
-    height: 52,
+    height: Platform.OS === 'web' ? 52 : 48,
     backgroundColor: '#F8FAFC',
     color: '#1E293B',
     padding: 16,
@@ -51,7 +56,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     borderWidth: 1,
     borderColor: '#E2E8F0',
-    fontSize: 16,
+    fontSize: Platform.OS === 'web' ? 16 : 16,
   },
   passwordContainer: {
     position: 'relative',
@@ -60,7 +65,7 @@ const styles = StyleSheet.create({
   },
   passwordInput: {
     width: '100%',
-    height: 52,
+    height: Platform.OS === 'web' ? 52 : 48,
     backgroundColor: '#F8FAFC',
     color: '#1E293B',
     padding: 16,
@@ -68,48 +73,52 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     borderColor: '#E2E8F0',
-    fontSize: 16,
+    fontSize: Platform.OS === 'web' ? 16 : 16,
   },
   eyeButton: {
     position: 'absolute',
     right: 16,
-    top: 16,
-    width: 20,
-    height: 20,
+    top: Platform.OS === 'web' ? 16 : 14,
+    width: 24,
+    height: 24,
     justifyContent: 'center',
     alignItems: 'center',
   },
   eyeIcon: {
-    fontSize: 18,
+    fontSize: Platform.OS === 'web' ? 18 : 20,
     color: '#64748B',
   },
   buttonStyle: {
     width: '100%',
-    height: 52,
+    height: Platform.OS === 'web' ? 52 : 48,
     backgroundColor: '#4F46E5',
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#4F46E5',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 12,
     elevation: 8,
-    marginTop: 8,
+    ...(Platform.OS === 'web' ? {
+      boxShadow: '0 4px 12px rgba(79, 70, 229, 0.3)',
+    } : {
+      shadowColor: '#4F46E5',
+      shadowOffset: {
+        width: 0,
+        height: 4,
+      },
+      shadowOpacity: 0.3,
+      shadowRadius: 12,
+    }),
   },
   buttonText: {
-    fontSize: 18,
+    fontSize: Platform.OS === 'web' ? 18 : 17,
     fontWeight: 'bold',
     color: '#FFFFFF',
   },
   toggleButton: {
-    marginTop: 20,
+    marginTop: Platform.OS === 'web' ? 20 : 16,
+    paddingVertical: 8,
   },
   toggleText: {
-    fontSize: 15,
+    fontSize: Platform.OS === 'web' ? 15 : 16,
     color: '#4F46E5',
     textDecorationLine: 'underline',
     textAlign: 'center',

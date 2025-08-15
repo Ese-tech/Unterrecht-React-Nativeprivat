@@ -127,11 +127,11 @@ export default function RootLayout() {
       console.error("Error during logout:", error);
     } finally {
       setUser(null);
-      // Redirect to home after logout
-      if (typeof window !== 'undefined') {
-        window.history.pushState({}, '', '/home');
-        window.location.reload();
+      // Redirect to home after logout - platform specific
+      if (Platform.OS === 'web' && typeof window !== 'undefined') {
+        window.location.href = '/home';
       }
+      // For mobile, the navigation will be handled by the auth context state change
     }
   };
 

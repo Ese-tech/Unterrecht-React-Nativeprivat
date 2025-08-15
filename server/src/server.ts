@@ -58,10 +58,10 @@ app.use(errorHandling);
 
 // Datenbankverbindung herstellen und Server starten
 connect().then(() => {
-  app.listen(config.PORT, () =>
-    console.log(`Server is running on http://localhost:${config.PORT}`)
+  app.listen(config.PORT, '0.0.0.0', () =>
+    console.log(`Server is running on http://0.0.0.0:${config.PORT}`)
   );
 }).catch(err => {
     console.error("Fehler beim Starten des Servers:", err);
     process.exit(1);
-});
+  });

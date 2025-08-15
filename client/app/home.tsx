@@ -121,7 +121,6 @@ export default function HomePage() {
       imageStyle={styles.backgroundImage}
     >
       <View style={styles.overlay} />
-      
       {message && (
         <View style={[
           styles.messageContainer, 
@@ -130,13 +129,10 @@ export default function HomePage() {
           <Text style={styles.messageText}>{message}</Text>
         </View>
       )}
-      
       {user ? (
         <View style={styles.welcomeContainer}>
           <Text style={styles.welcomeTitle}>Willkommen{user.username ? `, ${user.username}` : ''}!</Text>
-          <Text style={styles.welcomeSubtitle}>
-            Verwalte deine Aufgaben effizient und bleibe produktiv.
-          </Text>
+          <Text style={styles.welcomeSubtitle}>Verwalte deine Aufgaben effizient und bleibe produktiv.</Text>
           <View style={styles.featureList}>
             <Text style={styles.featureItem}>✅ Todos erstellen und verwalten</Text>
             <Text style={styles.featureItem}>📊 Fortschritt verfolgen</Text>
@@ -167,6 +163,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F1F5F9', // Much lighter background
+    paddingHorizontal: Platform.OS === 'web' ? 0 : 16,
   },
   backgroundImage: {
     opacity: 0.1, // Make background image more subtle
@@ -183,13 +180,13 @@ const styles = StyleSheet.create({
   },
   messageContainer: {
     position: 'absolute',
-    top: 60,
-    left: 20,
-    right: 20,
+    top: Platform.OS === 'web' ? 60 : 80,
+    left: Platform.OS === 'web' ? 20 : 16,
+    right: Platform.OS === 'web' ? 20 : 16,
     zIndex: 1000,
     borderRadius: 12,
-    padding: 16,
-    marginHorizontal: 20,
+    padding: Platform.OS === 'web' ? 16 : 14,
+    marginHorizontal: Platform.OS === 'web' ? 20 : 0,
   },
   successMessage: {
     backgroundColor: '#10B981',
@@ -205,33 +202,35 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontWeight: '600',
     textAlign: 'center',
-    fontSize: 16,
+    fontSize: Platform.OS === 'web' ? 16 : 15,
   },
   welcomeContainer: {
-    maxWidth: 400,
-    padding: 32,
+    maxWidth: Platform.OS === 'web' ? 400 : '90%',
+    padding: Platform.OS === 'web' ? 32 : 24,
     alignItems: 'center',
   },
   welcomeTitle: {
-    fontSize: 32,
+    fontSize: Platform.OS === 'web' ? 32 : 28,
     fontWeight: 'bold',
     color: '#4F46E5', // Changed to purple
     textAlign: 'center',
-    marginBottom: 16,
+    marginBottom: Platform.OS === 'web' ? 16 : 12,
   },
   welcomeSubtitle: {
-    fontSize: 18,
+    fontSize: Platform.OS === 'web' ? 18 : 17,
     color: '#475569', // Darker gray for better readability
     textAlign: 'center',
-    marginBottom: 32,
+    marginBottom: Platform.OS === 'web' ? 32 : 24,
+    lineHeight: Platform.OS === 'web' ? 26 : 24,
   },
   featureList: {
     alignSelf: 'stretch',
   },
   featureItem: {
-    fontSize: 16,
+    fontSize: Platform.OS === 'web' ? 16 : 16,
     color: '#64748B', // Medium gray
-    marginBottom: 12,
+    marginBottom: Platform.OS === 'web' ? 12 : 10,
     textAlign: 'center',
+    lineHeight: Platform.OS === 'web' ? 24 : 22,
   },
 });

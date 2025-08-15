@@ -214,7 +214,9 @@ export default function TodosPage() {
           style={styles.addButton}
           onPress={addTodo}
         >
-          <Text style={styles.addButtonText}>+</Text>
+          <Text style={styles.addButtonText}>
+            {Platform.OS === 'web' ? '+' : 'Hinzufügen'}
+          </Text>
         </TouchableOpacity>
       </View>
       
@@ -237,7 +239,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F7FAFC",
-    padding: 20,
+    padding: Platform.OS === 'web' ? 20 : 16,
   },
   loadingContainer: {
     flex: 1,
@@ -247,18 +249,18 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     marginTop: 10,
-    fontSize: 16,
+    fontSize: Platform.OS === 'web' ? 16 : 17,
     color: "#718096",
     fontWeight: "500",
   },
   header: {
-    marginBottom: 24,
+    marginBottom: Platform.OS === 'web' ? 24 : 20,
   },
   title: {
-    fontSize: 28,
+    fontSize: Platform.OS === 'web' ? 28 : 26,
     fontWeight: "bold",
     color: "#2D3748",
-    marginBottom: 16,
+    marginBottom: Platform.OS === 'web' ? 16 : 14,
     textAlign: "center",
   },
   statsContainer: {
@@ -266,7 +268,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     backgroundColor: "#FFFFFF",
     borderRadius: 12,
-    padding: 16,
+    padding: Platform.OS === 'web' ? 16 : 14,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -278,31 +280,32 @@ const styles = StyleSheet.create({
   },
   statItem: {
     alignItems: "center",
+    flex: 1,
   },
   statNumber: {
-    fontSize: 24,
+    fontSize: Platform.OS === 'web' ? 24 : 22,
     fontWeight: "bold",
     color: "#4F46E5",
     marginBottom: 4,
   },
   statLabel: {
-    fontSize: 12,
+    fontSize: Platform.OS === 'web' ? 12 : 13,
     color: "#718096",
     fontWeight: "500",
     textTransform: "uppercase",
   },
   inputSection: {
-    flexDirection: "row",
-    marginBottom: 24,
-    gap: 12,
+    flexDirection: Platform.OS === 'web' ? "row" : "column",
+    marginBottom: Platform.OS === 'web' ? 24 : 20,
+    gap: Platform.OS === 'web' ? 12 : 8,
   },
   textInput: {
-    flex: 1,
+    flex: Platform.OS === 'web' ? 1 : undefined,
     backgroundColor: "#FFFFFF",
     borderRadius: 12,
     paddingHorizontal: 16,
-    paddingVertical: 14,
-    fontSize: 16,
+    paddingVertical: Platform.OS === 'web' ? 14 : 16,
+    fontSize: Platform.OS === 'web' ? 16 : 16,
     borderWidth: 1,
     borderColor: "#E2E8F0",
     shadowColor: '#000',
@@ -313,12 +316,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 3,
     elevation: 2,
+    minHeight: Platform.OS === 'web' ? 48 : 50,
   },
   addButton: {
     backgroundColor: "#4F46E5",
     borderRadius: 12,
-    width: 48,
-    height: 48,
+    width: Platform.OS === 'web' ? 48 : '100%',
+    height: Platform.OS === 'web' ? 48 : 50,
     justifyContent: "center",
     alignItems: "center",
     shadowColor: '#4F46E5',
@@ -332,31 +336,32 @@ const styles = StyleSheet.create({
   },
   addButtonText: {
     color: "#FFFFFF",
-    fontSize: 24,
+    fontSize: Platform.OS === 'web' ? 24 : 18,
     fontWeight: "bold",
   },
   emptyState: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    paddingVertical: 48,
+    paddingVertical: Platform.OS === 'web' ? 48 : 32,
+    paddingHorizontal: Platform.OS === 'web' ? 0 : 20,
   },
   emptyStateText: {
-    fontSize: 64,
-    marginBottom: 16,
+    fontSize: Platform.OS === 'web' ? 64 : 56,
+    marginBottom: Platform.OS === 'web' ? 16 : 12,
   },
   emptyStateTitle: {
-    fontSize: 20,
+    fontSize: Platform.OS === 'web' ? 20 : 19,
     fontWeight: "600",
     color: "#2D3748",
     marginBottom: 8,
     textAlign: "center",
   },
   emptyStateSubtitle: {
-    fontSize: 16,
+    fontSize: Platform.OS === 'web' ? 16 : 16,
     color: "#718096",
     textAlign: "center",
-    paddingHorizontal: 32,
-    lineHeight: 24,
+    paddingHorizontal: Platform.OS === 'web' ? 32 : 16,
+    lineHeight: Platform.OS === 'web' ? 24 : 22,
   },
 });

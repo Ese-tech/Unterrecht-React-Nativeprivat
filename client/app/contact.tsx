@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet, ScrollView } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet, ScrollView, Platform } from "react-native";
 
 export default function ContactPage() {
   const [name, setName] = useState("");
@@ -94,34 +94,39 @@ const styles = StyleSheet.create({
     backgroundColor: '#F1F5F9', // Light background
   },
   content: {
-    padding: 24,
-    paddingTop: 40,
+    padding: Platform.OS === 'web' ? 24 : 20,
+    paddingTop: Platform.OS === 'web' ? 40 : 32,
+    maxWidth: Platform.OS === 'web' ? 600 : '100%',
+    alignSelf: 'center',
+    width: '100%',
   },
   title: {
-    fontSize: 32,
+    fontSize: Platform.OS === 'web' ? 32 : 28,
     fontWeight: 'bold',
     color: '#4F46E5', // Purple
     textAlign: 'center',
     marginBottom: 8,
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: Platform.OS === 'web' ? 16 : 16,
     color: '#475569', // Dark gray
     textAlign: 'center',
-    marginBottom: 32,
+    marginBottom: Platform.OS === 'web' ? 32 : 28,
+    lineHeight: Platform.OS === 'web' ? 24 : 22,
   },
   form: {
-    marginBottom: 40,
+    marginBottom: Platform.OS === 'web' ? 40 : 32,
   },
   input: {
     backgroundColor: '#FFFFFF',
     color: '#1E293B',
-    padding: 16,
+    padding: Platform.OS === 'web' ? 16 : 14,
     borderRadius: 12,
     marginBottom: 16,
-    fontSize: 16,
+    fontSize: Platform.OS === 'web' ? 16 : 16,
     borderWidth: 1,
     borderColor: '#E2E8F0',
+    minHeight: Platform.OS === 'web' ? 52 : 48,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -132,16 +137,18 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   textArea: {
-    height: 120,
-    paddingTop: 16,
+    height: Platform.OS === 'web' ? 120 : 110,
+    paddingTop: Platform.OS === 'web' ? 16 : 14,
     textAlignVertical: 'top',
   },
   submitButton: {
     backgroundColor: '#4F46E5',
-    padding: 16,
+    padding: Platform.OS === 'web' ? 16 : 14,
     borderRadius: 12,
     alignItems: 'center',
     marginTop: 8,
+    minHeight: Platform.OS === 'web' ? 52 : 48,
+    justifyContent: 'center',
     shadowColor: '#4F46E5',
     shadowOffset: {
       width: 0,
@@ -153,15 +160,15 @@ const styles = StyleSheet.create({
   },
   submitButtonText: {
     color: '#FFFFFF',
-    fontSize: 18,
+    fontSize: Platform.OS === 'web' ? 18 : 17,
     fontWeight: 'bold',
   },
   contactInfo: {
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
-    padding: 24,
-    marginHorizontal: 24,
+    padding: Platform.OS === 'web' ? 24 : 20,
+    marginHorizontal: Platform.OS === 'web' ? 24 : 0,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -174,14 +181,16 @@ const styles = StyleSheet.create({
     borderColor: '#E2E8F0',
   },
   contactTitle: {
-    fontSize: 20,
+    fontSize: Platform.OS === 'web' ? 20 : 19,
     fontWeight: 'bold',
     color: '#4F46E5',
-    marginBottom: 16,
+    marginBottom: Platform.OS === 'web' ? 16 : 14,
+    textAlign: 'center',
   },
   contactItem: {
-    fontSize: 16,
+    fontSize: Platform.OS === 'web' ? 16 : 16,
     color: '#475569',
-    marginBottom: 8,
+    marginBottom: Platform.OS === 'web' ? 8 : 6,
+    textAlign: 'center',
   },
 });
