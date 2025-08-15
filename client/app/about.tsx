@@ -18,18 +18,19 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#111827',
+    backgroundColor: '#F1F5F9', // Light background
     padding: 32,
   },
   title: {
     fontSize: 36,
     fontWeight: 'bold',
-    color: '#818cf8',
+    color: '#4F46E5', // Purple
     marginBottom: 16,
   },
   description: {
     fontSize: 18,
-    color: '#ffffff',
+    color: '#475569', // Dark gray
     textAlign: 'center',
+    lineHeight: 26,
   },
 });

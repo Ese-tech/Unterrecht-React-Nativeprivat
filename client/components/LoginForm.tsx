@@ -20,51 +20,70 @@ const styles = StyleSheet.create({
   formContainer: {
     width: '100%',
     maxWidth: 400,
-    backgroundColor: '#1f2937', // bg-gray-900
-    borderRadius: 16,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 20,
     padding: 32,
-    boxShadow: '0 10px 20px rgba(0, 0, 0, 0.25)',
-    elevation: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 10,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 30,
+    elevation: 15,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
   },
   title: {
-    fontSize: 36,
+    fontSize: 32,
     fontWeight: 'bold',
-    color: '#818cf8',
+    color: '#4F46E5',
     marginBottom: 32,
     textAlign: 'center',
   },
   inputStyle: {
     width: '100%',
-    height: 48,
-    backgroundColor: '#374151', // bg-gray-800
-    color: '#ffffff',
-    padding: 12,
+    height: 52,
+    backgroundColor: '#F8FAFC',
+    color: '#1E293B',
+    padding: 16,
     borderRadius: 12,
     marginBottom: 16,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    fontSize: 16,
   },
   buttonStyle: {
     width: '100%',
-    height: 48,
-    backgroundColor: '#4f46e5', // bg-indigo-600
+    height: 52,
+    backgroundColor: '#4F46E5',
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)',
+    shadowColor: '#4F46E5',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
     elevation: 8,
+    marginTop: 8,
   },
   buttonText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#ffffff',
+    color: '#FFFFFF',
   },
   toggleButton: {
-    marginTop: 16,
+    marginTop: 20,
   },
   toggleText: {
-    fontSize: 14,
-    color: '#818cf8',
+    fontSize: 15,
+    color: '#4F46E5',
     textDecorationLine: 'underline',
     textAlign: 'center',
+    fontWeight: '500',
   },
 });
 
@@ -93,7 +112,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
       <TextInput
         style={styles.inputStyle}
         placeholder="Benutzername"
-        placeholderTextColor="#A0AEC0"
+        placeholderTextColor="#64748B"
         value={username}
         onChangeText={setUsername}
       />
@@ -101,7 +120,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
     <TextInput
       style={styles.inputStyle}
       placeholder="E-Mail"
-      placeholderTextColor="#A0AEC0"
+      placeholderTextColor="#64748B"
       keyboardType="email-address"
       autoCapitalize="none"
       value={email}
@@ -110,7 +129,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
     <TextInput
       style={[styles.inputStyle, { marginBottom: 24 }]}
       placeholder="Passwort"
-      placeholderTextColor="#A0AEC0"
+      placeholderTextColor="#64748B"
       secureTextEntry
       value={password}
       onChangeText={setPassword}

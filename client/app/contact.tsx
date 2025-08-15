@@ -91,7 +91,7 @@ export default function ContactPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#111827',
+    backgroundColor: '#F1F5F9', // Light background
   },
   content: {
     padding: 24,
@@ -100,13 +100,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#818cf8',
+    color: '#4F46E5', // Purple
     textAlign: 'center',
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
-    color: '#ffffff',
+    color: '#475569', // Dark gray
     textAlign: 'center',
     marginBottom: 32,
   },
@@ -114,43 +114,74 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   input: {
-    backgroundColor: '#1f2937',
-    color: '#ffffff',
+    backgroundColor: '#FFFFFF',
+    color: '#1E293B',
     padding: 16,
     borderRadius: 12,
     marginBottom: 16,
     fontSize: 16,
     borderWidth: 1,
-    borderColor: '#374151',
+    borderColor: '#E2E8F0',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
   },
   textArea: {
     height: 120,
     paddingTop: 16,
+    textAlignVertical: 'top',
   },
   submitButton: {
-    backgroundColor: '#4f46e5',
+    backgroundColor: '#4F46E5',
     padding: 16,
     borderRadius: 12,
     alignItems: 'center',
     marginTop: 8,
+    shadowColor: '#4F46E5',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+    elevation: 6,
   },
   submitButtonText: {
-    color: '#ffffff',
+    color: '#FFFFFF',
     fontSize: 18,
     fontWeight: 'bold',
   },
   contactInfo: {
     alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 24,
+    marginHorizontal: 24,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    elevation: 4,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
   },
   contactTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#818cf8',
+    color: '#4F46E5',
     marginBottom: 16,
   },
   contactItem: {
     fontSize: 16,
-    color: '#ffffff',
+    color: '#475569',
     marginBottom: 8,
   },
 });

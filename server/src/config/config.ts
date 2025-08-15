@@ -19,7 +19,7 @@ function getEnvVar(key: string, required: boolean = true): string {
 const config: Config = {
   PORT: parseInt(process.env.PORT || "3006", 10),
   MONGODB_URL: getEnvVar("MONGODB_URL"),
-  FRONTEND_URL: process.env.FRONTEND_URL || "http://localhost:8081",
+  FRONTEND_URL: process.env.FRONTEND_URL || "http://localhost:8082",
   JWT_SECRET: getEnvVar("JWT_SECRET"),
 };
 

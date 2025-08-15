@@ -14,6 +14,8 @@ export default function HomePage() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState<"success" | "error" | "">("");
   const formOpacity = useRef(new Animated.Value(0)).current;
   const navigation = useNavigation();
 
@@ -25,21 +27,67 @@ export default function HomePage() {
     }).start();
   }, [formOpacity]);
 
+  const showMessage = (msg: string, type: "success" | "error") => {
+    setMessage(msg);
+    setMessageType(type);
+    setTimeout(() => {
+      setMessage("");
+      setMessageType("");
+    }, 4000);
+  };
+
   const handleAuth = async () => {
     try {
-    const endpoint = isLogin ? "login" : "register";
-    const body = isLogin ? { email, password } : { username, email, password };
-    
-    // Only log endpoint for debugging (never log sensitive data)
-    console.log('Authentication request to:', endpoint);
-    
-    const res = await axios.post(`${API_URL}/auth/${endpoint}`, body);
+      if (!isLogin && (!username || !email || !password)) {
+        showMessage("Bitte füllen Sie alle Felder aus.", "error");
+        return;
+      }
+      if (isLogin && (!email || !password)) {
+        showMessage("Bitte geben Sie E-Mail und Passwort ein.", "error");
+        return;
+      }
+
+      const endpoint = isLogin ? "login" : "register";
+      const body = isLogin ? { email, password } : { username, email, password };
+      
+      // Only log endpoint for debugging (never log sensitive data)
+      console.log('Authentication request to:', endpoint);
+      
+      const res = await axios.post(`${API_URL}/auth/${endpoint}`, body);
       await AsyncStorage.setItem("token", res.data.token);
       setUser(res.data);
+      
+      showMessage(
+        isLogin ? "Erfolgreich angemeldet!" : "Konto erfolgreich erstellt!",
+        "success"
+      );
+      
+      // Clear form
+      setUsername("");
+      setEmail("");
+      setPassword("");
      
     } catch (e: any) {
       console.error('Auth error (safe):', e.response?.status || 'Unknown error');
-      Alert.alert("Fehler", e.response?.data?.message || "Ein Fehler ist aufgetreten.");
+      
+      let errorMessage = "Ein Fehler ist aufgetreten.";
+      
+      if (e.response?.data?.message) {
+        const serverMessage = e.response.data.message;
+        if (serverMessage.includes("email") && serverMessage.includes("already")) {
+          errorMessage = "Diese E-Mail-Adresse ist bereits registriert.";
+        } else if (serverMessage.includes("username") && serverMessage.includes("already")) {
+          errorMessage = "Dieser Benutzername ist bereits vergeben.";
+        } else if (serverMessage.includes("password")) {
+          errorMessage = "Ungültiges Passwort.";
+        } else if (serverMessage.includes("user not found") || serverMessage.includes("Invalid")) {
+          errorMessage = "Ungültige Anmeldedaten.";
+        } else {
+          errorMessage = serverMessage;
+        }
+      }
+      
+      showMessage(errorMessage, "error");
     }
   };
 
@@ -47,9 +95,20 @@ export default function HomePage() {
     <ImageBackground
       source={require("../assets/images/splash-icon.png")}
       style={styles.background}
-      resizeMode="cover"
+      resizeMode="contain"
+      imageStyle={styles.backgroundImage}
     >
       <View style={styles.overlay} />
+      
+      {/* Message Display */}
+      {message && (
+        <View style={[
+          styles.messageContainer, 
+          messageType === "success" ? styles.successMessage : styles.errorMessage
+        ]}>
+          <Text style={styles.messageText}>{message}</Text>
+        </View>
+      )}
       
       {user ? (
         // Show welcome content when logged in
@@ -88,7 +147,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#111827',
+    backgroundColor: '#F1F5F9', // Much lighter background
+  },
+  backgroundImage: {
+    opacity: 0.1, // Make background image more subtle
+    bottom: 50,
+    right: 20,
   },
   overlay: {
     position: 'absolute',
@@ -96,7 +160,33 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(30, 41, 59, 0.1)', // Much lighter overlay
+  },
+  messageContainer: {
+    position: 'absolute',
+    top: 60,
+    left: 20,
+    right: 20,
+    zIndex: 1000,
+    borderRadius: 12,
+    padding: 16,
+    marginHorizontal: 20,
+  },
+  successMessage: {
+    backgroundColor: '#10B981',
+    borderColor: '#059669',
+    borderWidth: 1,
+  },
+  errorMessage: {
+    backgroundColor: '#EF4444',
+    borderColor: '#DC2626',
+    borderWidth: 1,
+  },
+  messageText: {
+    color: '#FFFFFF',
+    fontWeight: '600',
+    textAlign: 'center',
+    fontSize: 16,
   },
   welcomeContainer: {
     maxWidth: 400,
@@ -106,13 +196,13 @@ const styles = StyleSheet.create({
   welcomeTitle: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#818cf8',
+    color: '#4F46E5', // Changed to purple
     textAlign: 'center',
     marginBottom: 16,
   },
   welcomeSubtitle: {
     fontSize: 18,
-    color: '#ffffff',
+    color: '#475569', // Darker gray for better readability
     textAlign: 'center',
     marginBottom: 32,
   },
@@ -121,7 +211,7 @@ const styles = StyleSheet.create({
   },
   featureItem: {
     fontSize: 16,
-    color: '#ffffff',
+    color: '#64748B', // Medium gray
     marginBottom: 12,
     textAlign: 'center',
   },

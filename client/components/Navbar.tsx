@@ -1,58 +1,70 @@
 import React from "react";
 import { View, Text, Pressable, StyleSheet } from "react-native";
-import { Link, useRouter } from "expo-router";
 
 interface NavbarProps {
   isLoggedIn: boolean;
   onLogout: () => void;
 }
-const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, onLogout }) => (
-  <View style={styles.container}>
-    <Link href="/home" asChild>
-      <Pressable>
+const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, onLogout }) => {
+  const handleNavigation = (path: string) => {
+    // For web navigation
+    if (typeof window !== 'undefined') {
+      // Use direct hash routing
+      window.location.hash = path;
+      // No need to reload, let Expo Router handle the navigation
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Pressable onPress={() => handleNavigation('/home')}>
         <Text style={styles.linkText}>Home</Text>
       </Pressable>
-    </Link>
-    <Link href="/about" asChild>
-      <Pressable>
+      <Pressable onPress={() => handleNavigation('/about')}>
         <Text style={styles.linkText}>About</Text>
       </Pressable>
-    </Link>
-    <Link href="/contact" asChild>
-      <Pressable>
+      <Pressable onPress={() => handleNavigation('/contact')}>
         <Text style={styles.linkText}>Contact</Text>
       </Pressable>
-    </Link>
-    {isLoggedIn && (
-      <Link href="/todos" asChild>
-        <Pressable>
+      {isLoggedIn && (
+        <Pressable onPress={() => handleNavigation('/todos')}>
           <Text style={styles.linkText}>Todos</Text>
         </Pressable>
-      </Link>
-    )}
-    <Pressable onPress={isLoggedIn ? onLogout : undefined}>
-      <Text style={[styles.linkText, { color: isLoggedIn ? '#f87171' : '#10b981' }]}>
-        {isLoggedIn ? "Logout" : ""}
-      </Text>
-    </Pressable>
-  </View>
-);
+      )}
+      {isLoggedIn && (
+        <Pressable onPress={onLogout}>
+          <Text style={[styles.linkText, { color: '#EF4444' }]}>
+            Logout
+          </Text>
+        </Pressable>
+      )}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#1f2937',
+    backgroundColor: '#FFFFFF', // White background
     padding: 16,
-    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.25)',
-    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E2E8F0',
   },
   linkText: {
     fontSize: 18,
-    color: '#818cf8',
+    color: '#4F46E5', // Purple
     fontWeight: 'bold',
-    paddingHorizontal: 8,
+    paddingHorizontal: 12,
   },
 });
 

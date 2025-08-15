@@ -5,8 +5,7 @@ import { AuthContext } from "./_layout";
 import TodoList from "../components/TodoList";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { router, useNavigation } from "@react-navigation/native";
-
+import { useNavigation } from "@react-navigation/native";
 
 const API_URL = "http://localhost:5000/api";
 
@@ -15,12 +14,14 @@ export default function TodosPage() {
   const [todos, setTodos] = useState<any[]>([]);
   const [newTodo, setNewTodo] = useState("");
   const [isFetchingTodos, setIsFetchingTodos] = useState(true);
-  const navigation = useNavigation();
 
   useEffect(() => {
     if (!isLoading) {
         if (!user) {
-            router.replace("/"); // Use router instance
+            // Redirect to home for web
+            if (typeof window !== 'undefined') {
+              window.location.hash = '/home';
+            }
         } else {
             fetchTodos();
         }
@@ -202,7 +203,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     borderRadius: 12,
     padding: 16,
-    boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.1)",
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
     elevation: 3,
   },
   statItem: {
@@ -234,7 +241,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     borderWidth: 1,
     borderColor: "#E2E8F0",
-    boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.1)",
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
     elevation: 2,
   },
   addButton: {
@@ -244,7 +257,13 @@ const styles = StyleSheet.create({
     height: 48,
     justifyContent: "center",
     alignItems: "center",
-    boxShadow: "0px 2px 8px rgba(79, 70, 229, 0.3)",
+    shadowColor: '#4F46E5',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
     elevation: 4,
   },
   addButtonText: {

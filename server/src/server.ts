@@ -14,6 +14,8 @@ import cors from "cors";
 const allowedOrigins = [
   "https://fullstack-frontend-login.onrender.com",
   "http://localhost:8081", // für lokale Entwicklung
+  "http://localhost:8082", // für alternativen Port
+  "http://localhost:8083", // für neuen Port
 ];
 
 const app = express();
