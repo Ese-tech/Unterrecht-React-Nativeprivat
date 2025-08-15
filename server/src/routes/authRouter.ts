@@ -2,7 +2,7 @@
 
 import { Router } from "express";
 import * as authController from "../controllers/authController";
-import { verifyToken } from "../middleware/verifyToken";
+import protect from "../middleware/authMiddleware"; // Use the cookie-compatible middleware
 
 const router = Router();
 
@@ -12,7 +12,7 @@ router.post("/login", authController.login);
 router.post("/logout", authController.logout);
 
 //Geschützt (eigene Dateien)
-router.get("/profile", verifyToken, authController.getOwnProfile); // eingelogt
-router.put("/profile", verifyToken, authController.updateOwnProfile); // eingelogt
+router.get("/profile", protect, authController.getOwnProfile); // eingelogt
+router.put("/profile", protect, authController.updateOwnProfile); // eingelogt
 
 export default router;

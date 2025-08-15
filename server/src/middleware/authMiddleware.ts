@@ -24,15 +24,17 @@ declare global {
 const protect = (req: Request, res: Response, next: NextFunction) => {
     let token;
 
-    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-        try {
-            token = req.headers.authorization.split(' ')[1];
-            
-            // ❗ FEHLERBEHEBUNG: Stelle sicher, dass der Token nach dem Split existiert
-            if (!token) {
-                return res.status(401).json({ message: 'Nicht autorisiert, Token ungültig' });
-            }
+    // First try to get token from HTTP-only cookie (more secure)
+    if (req.cookies && req.cookies.token) {
+        token = req.cookies.token;
+    }
+    // Fallback to Authorization header for mobile apps
+    else if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+        token = req.headers.authorization.split(' ')[1];
+    }
 
+    if (token) {
+        try {
             // ❗ FEHLERBEHEBUNG: Stelle sicher, dass der geheime Schlüssel existiert
             if (!config.JWT_SECRET) {
                 return res.status(500).json({ message: 'Server-Konfigurationsfehler: Geheimer Schlüssel fehlt.' });

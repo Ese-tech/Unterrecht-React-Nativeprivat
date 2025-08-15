@@ -1,13 +1,23 @@
 // client/app/todos.tsx
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Alert, ActivityIndicator, StyleSheet } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Alert, ActivityIndicator, StyleSheet, Platform } from "react-native";
 import { AuthContext } from "./_layout";
 import TodoList from "../components/TodoList";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 
-const API_URL = "http://localhost:5000/api";
+// Use IP address for Android/iOS, localhost for web
+const getApiUrl = () => {
+  if (Platform.OS === 'web') {
+    return "http://localhost:5000/api";
+  } else {
+    // For Android/iOS, use your computer's IP address
+    return "http://192.168.0.120:5000/api";
+  }
+};
+
+const API_URL = getApiUrl();
 
 export default function TodosPage() {
   const { user, isLoading } = useContext(AuthContext);
@@ -20,7 +30,8 @@ export default function TodosPage() {
         if (!user) {
             // Redirect to home for web
             if (typeof window !== 'undefined') {
-              window.location.hash = '/home';
+              window.history.pushState({}, '', '/home');
+              window.location.reload();
             }
         } else {
             fetchTodos();
@@ -30,11 +41,23 @@ export default function TodosPage() {
 
   const fetchTodos = async () => {
     try {
-      const token = await AsyncStorage.getItem("token");
-      const res = await axios.get(`${API_URL}/todos`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setTodos(res.data);
+      if (typeof window !== 'undefined') {
+        // Web: Use cookies (HTTP-only cookies are sent automatically)
+        const res = await axios.get(`${API_URL}/todos`, {
+          withCredentials: true, // Include cookies
+        });
+        setTodos(res.data);
+      } else {
+        // Mobile: Use AsyncStorage as fallback
+        const userData = await AsyncStorage.getItem("userToken");
+        if (userData) {
+          const parsedData = JSON.parse(userData);
+          const res = await axios.get(`${API_URL}/todos`, {
+            headers: { Authorization: `Bearer ${parsedData.token}` },
+          });
+          setTodos(res.data);
+        }
+      }
     } catch (e) {
       Alert.alert("Fehler", "Todos konnten nicht geladen werden.");
     } finally {
@@ -48,13 +71,27 @@ export default function TodosPage() {
       return;
     }
     try {
-      const token = await AsyncStorage.getItem("token");
-      const res = await axios.post(
-        `${API_URL}/todos`,
-        { text: newTodo.trim() },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setTodos((prev) => [...prev, res.data]);
+      if (typeof window !== 'undefined') {
+        // Web: Use cookies (HTTP-only cookies are sent automatically)
+        const res = await axios.post(
+          `${API_URL}/todos`,
+          { text: newTodo.trim() },
+          { withCredentials: true } // Include cookies
+        );
+        setTodos((prev) => [...prev, res.data]);
+      } else {
+        // Mobile: Use AsyncStorage as fallback
+        const userData = await AsyncStorage.getItem("userToken");
+        if (userData) {
+          const parsedData = JSON.parse(userData);
+          const res = await axios.post(
+            `${API_URL}/todos`,
+            { text: newTodo.trim() },
+            { headers: { Authorization: `Bearer ${parsedData.token}` } }
+          );
+          setTodos((prev) => [...prev, res.data]);
+        }
+      }
       setNewTodo("");
       Alert.alert("Erfolg", "Todo wurde erfolgreich hinzugefügt!");
     } catch (e) {
@@ -64,15 +101,31 @@ export default function TodosPage() {
 
   const toggleTodo = async (id: string, completed: boolean) => {
     try {
-      const token = await AsyncStorage.getItem("token");
-      const res = await axios.put(
-        `${API_URL}/todos/${id}`,
-        { completed: !completed },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setTodos((prev) =>
-        prev.map((todo) => (todo._id === id ? res.data : todo))
-      );
+      if (typeof window !== 'undefined') {
+        // Web: Use cookies (HTTP-only cookies are sent automatically)
+        const res = await axios.put(
+          `${API_URL}/todos/${id}`,
+          { completed: !completed },
+          { withCredentials: true } // Include cookies
+        );
+        setTodos((prev) =>
+          prev.map((todo) => (todo._id === id ? res.data : todo))
+        );
+      } else {
+        // Mobile: Use AsyncStorage as fallback
+        const userData = await AsyncStorage.getItem("userToken");
+        if (userData) {
+          const parsedData = JSON.parse(userData);
+          const res = await axios.put(
+            `${API_URL}/todos/${id}`,
+            { completed: !completed },
+            { headers: { Authorization: `Bearer ${parsedData.token}` } }
+          );
+          setTodos((prev) =>
+            prev.map((todo) => (todo._id === id ? res.data : todo))
+          );
+        }
+      }
     } catch (e) {
       Alert.alert("Fehler", "Todo konnte nicht aktualisiert werden.");
     }
@@ -89,10 +142,21 @@ export default function TodosPage() {
           style: "destructive",
           onPress: async () => {
             try {
-              const token = await AsyncStorage.getItem("token");
-              await axios.delete(`${API_URL}/todos/${id}`, {
-                headers: { Authorization: `Bearer ${token}` },
-              });
+              if (typeof window !== 'undefined') {
+                // Web: Use cookies (HTTP-only cookies are sent automatically)
+                await axios.delete(`${API_URL}/todos/${id}`, {
+                  withCredentials: true, // Include cookies
+                });
+              } else {
+                // Mobile: Use AsyncStorage as fallback
+                const userData = await AsyncStorage.getItem("userToken");
+                if (userData) {
+                  const parsedData = JSON.parse(userData);
+                  await axios.delete(`${API_URL}/todos/${id}`, {
+                    headers: { Authorization: `Bearer ${parsedData.token}` },
+                  });
+                }
+              }
               setTodos((prev) => prev.filter((todo) => todo._id !== id));
               Alert.alert("Erfolg", "Todo wurde gelöscht.");
             } catch (e) {

@@ -24,11 +24,22 @@
          const newUser = new User({ username, email, password });
          await newUser.save();
 
+         // Generate token
+         const token = generateToken(newUser._id.toString());
+         
+         // Set HTTP-only cookie (more secure than localStorage)
+         res.cookie('token', token, {
+             httpOnly: true, // Cannot be accessed by JavaScript
+             secure: process.env.NODE_ENV === 'production', // HTTPS only in production
+             sameSite: 'strict', // CSRF protection
+             maxAge: 3600000 // 1 hour
+         });
+
          res.status(201).json({
              _id: newUser._id,
              username: newUser.username,
              email: newUser.email,
-            token: generateToken(newUser._id.toString())
+             // Don't send token in response body for security
          });
      } catch (e) {
          next(e);
@@ -52,11 +63,22 @@
              return res.status(400).json({ message: 'Ungültige Anmeldeinformationen' });
          }
 
+         // Generate token
+         const token = generateToken(user._id.toString());
+         
+         // Set HTTP-only cookie (more secure than localStorage)
+         res.cookie('token', token, {
+             httpOnly: true, // Cannot be accessed by JavaScript
+             secure: process.env.NODE_ENV === 'production', // HTTPS only in production
+             sameSite: 'strict', // CSRF protection
+             maxAge: 3600000 // 1 hour
+         });
+
          res.status(200).json({
              _id: user._id,
              username: user.username,
              email: user.email,
-             token: generateToken(user._id.toString())
+             // Don't send token in response body for security
          });
      } catch (e) {
          next(e);

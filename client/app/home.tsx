@@ -6,7 +6,17 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 
-const API_URL = "http://localhost:5000/api";
+// Use IP address for Android/iOS, localhost for web
+const getApiUrl = () => {
+  if (Platform.OS === 'web') {
+    return "http://localhost:5000/api";
+  } else {
+    // For Android/iOS, use your computer's IP address
+    return "http://192.168.0.120:5000/api";
+  }
+};
+
+const API_URL = getApiUrl();
 
 export default function HomePage() {
   const { user, setUser } = useContext(AuthContext);
@@ -53,8 +63,20 @@ export default function HomePage() {
       // Only log endpoint for debugging (never log sensitive data)
       console.log('Authentication request to:', endpoint);
       
-      const res = await axios.post(`${API_URL}/auth/${endpoint}`, body);
-      await AsyncStorage.setItem("token", res.data.token);
+      // Configure axios to include cookies for web
+      const config = {
+        withCredentials: true, // Important: Include cookies in requests
+      };
+      
+      const res = await axios.post(`${API_URL}/auth/${endpoint}`, body, config);
+      
+      // For mobile apps, we still need to store token in AsyncStorage
+      // since cookies don't work the same way in mobile apps
+      if (typeof window === 'undefined') {
+        // Mobile: use AsyncStorage (fallback)
+        await AsyncStorage.setItem("userToken", JSON.stringify(res.data));
+      }
+      
       setUser(res.data);
       
       showMessage(
@@ -100,7 +122,6 @@ export default function HomePage() {
     >
       <View style={styles.overlay} />
       
-      {/* Message Display */}
       {message && (
         <View style={[
           styles.messageContainer, 
@@ -111,9 +132,8 @@ export default function HomePage() {
       )}
       
       {user ? (
-        // Show welcome content when logged in
         <View style={styles.welcomeContainer}>
-          <Text style={styles.welcomeTitle}>Willkommen, {user.username}!</Text>
+          <Text style={styles.welcomeTitle}>Willkommen{user.username ? `, ${user.username}` : ''}!</Text>
           <Text style={styles.welcomeSubtitle}>
             Verwalte deine Aufgaben effizient und bleibe produktiv.
           </Text>
@@ -124,7 +144,6 @@ export default function HomePage() {
           </View>
         </View>
       ) : (
-        // Show login form when not logged in
         <LoginForm
           isLogin={isLogin}
           username={username}

@@ -16,6 +16,9 @@ const allowedOrigins = [
   "http://localhost:8081", // für lokale Entwicklung
   "http://localhost:8082", // für alternativen Port
   "http://localhost:8083", // für neuen Port
+  "http://192.168.0.120:8081", // für Android
+  "http://192.168.0.120:8082", // für Android
+  "http://192.168.0.120:8083", // für Android
 ];
 
 const app = express();

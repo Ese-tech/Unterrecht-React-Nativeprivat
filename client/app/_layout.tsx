@@ -3,9 +3,22 @@
 // import '../global.css';
 import React, { useState, useEffect, createContext } from "react";
 import { Stack } from "expo-router";
+import { Platform } from "react-native";
 import Navbar from "../components/Navbar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 // import { useNavigation } from "@react-navigation/native";
+
+// Use IP address for Android/iOS, localhost for web
+const getApiUrl = () => {
+  if (Platform.OS === 'web') {
+    return "http://localhost:5000/api";
+  } else {
+    // For Android/iOS, use your computer's IP address
+    return "http://192.168.0.120:5000/api";
+  }
+};
+
+const API_URL = getApiUrl();
 
 // if (typeof window !== "undefined") {
 //   require("../dist/output.css");
@@ -27,25 +40,99 @@ export const AuthContext = createContext<AuthContextType>({
 export default function RootLayout() {
   const [user, setUser] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
-  // const navigation = useNavigation();
 
-  useEffect(() => {
-    // Überprüfe beim Start, ob ein Token im AsyncStorage vorhanden ist
-    AsyncStorage.getItem("token").then((token) => {
-      if (token) {
-        setUser({ token });
+  // Storage helper that works for both web and mobile
+  const getStoredToken = async () => {
+    try {
+      if (typeof window !== 'undefined') {
+        // Web: use localStorage
+        return localStorage.getItem("token");
+      } else {
+        // Mobile: use AsyncStorage
+        return await AsyncStorage.getItem("token");
       }
-      setIsLoading(false);
-    });
-  }, []);
-
-  const handleNavigate = (page: string) => {
-    // navigation.navigate(page); // <-- Actually navigate!
+    } catch (error) {
+      console.error("Error getting stored token:", error);
+      return null;
+    }
   };
 
+  const removeStoredToken = async () => {
+    try {
+      if (typeof window !== 'undefined') {
+        // Web: use localStorage
+        localStorage.removeItem("token");
+      } else {
+        // Mobile: use AsyncStorage
+        await AsyncStorage.removeItem("token");
+      }
+    } catch (error) {
+      console.error("Error removing stored token:", error);
+    }
+  };
+
+  useEffect(() => {
+    // Check if there's authentication status when the app loads
+    const checkAuthStatus = async () => {
+      try {
+        if (typeof window !== 'undefined') {
+          // Web: Try to get user info from server using HTTP-only cookies
+          const response = await fetch(`${API_URL}/auth/profile`, {
+            method: 'GET',
+            credentials: 'include', // Important: Include cookies
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+          
+          if (response.ok) {
+            const userData = await response.json();
+            setUser(userData);
+          } else {
+            // If token validation fails, clear any stored data
+            setUser(null);
+          }
+        } else {
+          // Mobile: Check AsyncStorage for fallback auth
+          const storedUser = await AsyncStorage.getItem("userToken");
+          if (storedUser) {
+            const userData = JSON.parse(storedUser);
+            setUser(userData);
+          }
+        }
+      } catch (error) {
+        console.error("Error checking auth status:", error);
+        setUser(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAuthStatus();
+  }, []);
+
   const handleLogout = async () => {
-    await AsyncStorage.removeItem("token");
-    setUser(null);
+    try {
+      if (typeof window !== 'undefined') {
+        // Web: Call logout endpoint to clear HTTP-only cookie
+        await fetch(`${API_URL}/auth/logout`, {
+          method: 'POST',
+          credentials: 'include', // Include cookies
+        });
+      } else {
+        // Mobile: Clear AsyncStorage
+        await AsyncStorage.removeItem("userToken");
+      }
+    } catch (error) {
+      console.error("Error during logout:", error);
+    } finally {
+      setUser(null);
+      // Redirect to home after logout
+      if (typeof window !== 'undefined') {
+        window.history.pushState({}, '', '/home');
+        window.location.reload();
+      }
+    }
   };
 
   if (isLoading) {

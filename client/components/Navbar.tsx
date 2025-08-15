@@ -7,11 +7,12 @@ interface NavbarProps {
 }
 const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, onLogout }) => {
   const handleNavigation = (path: string) => {
-    // For web navigation
+    // For web navigation, use window.location properly
     if (typeof window !== 'undefined') {
-      // Use direct hash routing
-      window.location.hash = path;
-      // No need to reload, let Expo Router handle the navigation
+      // Remove the current hash and navigate to the new route
+      window.history.pushState({}, '', path);
+      // Trigger a page reload to ensure the route change takes effect
+      window.location.reload();
     }
   };
 

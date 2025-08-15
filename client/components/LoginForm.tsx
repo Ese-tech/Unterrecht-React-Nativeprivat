@@ -53,6 +53,36 @@ const styles = StyleSheet.create({
     borderColor: '#E2E8F0',
     fontSize: 16,
   },
+  passwordContainer: {
+    position: 'relative',
+    width: '100%',
+    marginBottom: 24,
+  },
+  passwordInput: {
+    width: '100%',
+    height: 52,
+    backgroundColor: '#F8FAFC',
+    color: '#1E293B',
+    padding: 16,
+    paddingRight: 50, 
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    fontSize: 16,
+  },
+  eyeButton: {
+    position: 'absolute',
+    right: 16,
+    top: 16,
+    width: 20,
+    height: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  eyeIcon: {
+    fontSize: 18,
+    color: '#64748B',
+  },
   buttonStyle: {
     width: '100%',
     height: 52,
@@ -98,55 +128,73 @@ const LoginForm: React.FC<LoginFormProps> = ({
   onSubmit,
   toggleMode,
   formOpacity,
-}) => (
-  <Animated.View
-    style={[
-      styles.formContainer,
-      { opacity: formOpacity },
-    ]}
-  >
-    <Text style={styles.title}>
-      {isLogin ? "Login" : "Registrieren"}
-    </Text>
-    {!isLogin && (
+}) => {
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  return (
+    <Animated.View
+      style={[
+        styles.formContainer,
+        { opacity: formOpacity },
+      ]}
+    >
+      <Text style={styles.title}>
+        {isLogin ? "Login" : "Registrieren"}
+      </Text>
+      {!isLogin && (
+        <TextInput
+          style={styles.inputStyle}
+          placeholder="Benutzername"
+          placeholderTextColor="#64748B"
+          value={username}
+          onChangeText={setUsername}
+        />
+      )}
       <TextInput
         style={styles.inputStyle}
-        placeholder="Benutzername"
+        placeholder="E-Mail"
         placeholderTextColor="#64748B"
-        value={username}
-        onChangeText={setUsername}
+        keyboardType="email-address"
+        autoCapitalize="none"
+        value={email}
+        onChangeText={setEmail}
       />
-    )}
-    <TextInput
-      style={styles.inputStyle}
-      placeholder="E-Mail"
-      placeholderTextColor="#64748B"
-      keyboardType="email-address"
-      autoCapitalize="none"
-      value={email}
-      onChangeText={setEmail}
-    />
-    <TextInput
-      style={[styles.inputStyle, { marginBottom: 24 }]}
-      placeholder="Passwort"
-      placeholderTextColor="#64748B"
-      secureTextEntry
-      value={password}
-      onChangeText={setPassword}
-    />
-    <TouchableOpacity
-      style={styles.buttonStyle}
-      onPress={onSubmit}
-    >
-      <Text style={styles.buttonText}>
-        {isLogin ? "Anmelden" : "Registrieren"}
-      </Text>
-    </TouchableOpacity>
-    <TouchableOpacity style={styles.toggleButton} onPress={toggleMode}>
-      <Text style={styles.toggleText}>
-        {isLogin ? "Noch kein Konto? Registrieren" : "Schon ein Konto? Anmelden"}
-      </Text>
-    </TouchableOpacity>
-  </Animated.View>
-);
+      <View style={styles.passwordContainer}>
+        <TextInput
+          style={styles.passwordInput}
+          placeholder="Passwort"
+          placeholderTextColor="#64748B"
+          secureTextEntry={!showPassword}
+          value={password}
+          onChangeText={setPassword}
+        />
+        <TouchableOpacity
+          style={styles.eyeButton}
+          onPress={togglePasswordVisibility}
+        >
+          <Text style={styles.eyeIcon}>
+            {showPassword ? "🙈" : "👁️"}
+          </Text>
+        </TouchableOpacity>
+      </View>
+      <TouchableOpacity
+        style={styles.buttonStyle}
+        onPress={onSubmit}
+      >
+        <Text style={styles.buttonText}>
+          {isLogin ? "Anmelden" : "Registrieren"}
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.toggleButton} onPress={toggleMode}>
+        <Text style={styles.toggleText}>
+          {isLogin ? "Noch kein Konto? Registrieren" : "Schon ein Konto? Anmelden"}
+        </Text>
+      </TouchableOpacity>
+    </Animated.View>
+  );
+};
 export default LoginForm;
