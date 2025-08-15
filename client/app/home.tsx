@@ -5,18 +5,7 @@ import LoginForm from "../components/LoginForm";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
-
-// Use IP address for Android/iOS, localhost for web
-const getApiUrl = () => {
-  if (Platform.OS === 'web') {
-    return "http://localhost:5000/api";
-  } else {
-    // For Android/iOS, use your computer's IP address
-    return "http://192.168.0.120:5000/api";
-  }
-};
-
-const API_URL = getApiUrl();
+import { API_URL } from "../config/api";
 
 export default function HomePage() {
   const { user, setUser } = useContext(AuthContext);

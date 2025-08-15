@@ -6,19 +6,8 @@ import { Stack } from "expo-router";
 import { Platform } from "react-native";
 import Navbar from "../components/Navbar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { API_URL } from "../config/api";
 // import { useNavigation } from "@react-navigation/native";
-
-// Use IP address for Android/iOS, localhost for web
-const getApiUrl = () => {
-  if (Platform.OS === 'web') {
-    return "http://localhost:5000/api";
-  } else {
-    // For Android/iOS, use your computer's IP address
-    return "http://192.168.0.120:5000/api";
-  }
-};
-
-const API_URL = getApiUrl();
 
 // if (typeof window !== "undefined") {
 //   require("../dist/output.css");

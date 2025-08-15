@@ -1,28 +1,35 @@
 import React from "react";
 import { View, Pressable, Text, StyleSheet, Platform } from "react-native";
-import { useRouter } from "expo-router";
+// Let's try importing the router imperative API
+let router: any;
+try {
+  const expoRouter = require('expo-router');
+  router = expoRouter.router;
+} catch (e) {
+  console.log('Could not import expo-router:', e);
+}
 
 interface NavbarProps {
   isLoggedIn: boolean;
   onLogout: () => void;
 }
-const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, onLogout }) => {
-  const router = useRouter();
 
+const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, onLogout }) => {
   const handleNavigation = (path: string) => {
-    try {
-      if (Platform.OS === 'web' && typeof window !== 'undefined') {
-        // For web, try expo-router first, fallback to window.location
-        router.push(path);
+    if (Platform.OS === 'web' && typeof window !== 'undefined') {
+      window.location.href = path;
+    } else {
+      // Try using the router imperative API if available
+      if (router && typeof router.push === 'function') {
+        try {
+          router.push(path);
+        } catch (e) {
+          console.log('Router navigation failed:', e);
+          // Fallback to console log
+          console.log('Mobile navigation to:', path);
+        }
       } else {
-        // For mobile platforms, use expo-router's push method
-        router.push(path);
-      }
-    } catch (error) {
-      console.log('Navigation error:', error);
-      // Fallback for web only
-      if (Platform.OS === 'web' && typeof window !== 'undefined') {
-        window.location.href = path;
+        console.log('No router available, logging navigation to:', path);
       }
     }
   };
