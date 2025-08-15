@@ -1,5 +1,5 @@
 import React, { useState, useContext, useRef } from "react";
-import { View, ImageBackground, Animated, Alert, StyleSheet, Platform } from "react-native";
+import { View, ImageBackground, Animated, Alert, StyleSheet, Platform, Text } from "react-native";
 import { AuthContext } from "./_layout";
 import LoginForm from "../components/LoginForm";
 import axios from "axios";
@@ -30,15 +30,15 @@ export default function HomePage() {
     const endpoint = isLogin ? "login" : "register";
     const body = isLogin ? { email, password } : { username, email, password };
     
-    console.log('Sending request to:', `${API_URL}/auth/${endpoint}`);
-    console.log('Request body:', body);
+    // Only log endpoint for debugging (never log sensitive data)
+    console.log('Authentication request to:', endpoint);
     
     const res = await axios.post(`${API_URL}/auth/${endpoint}`, body);
       await AsyncStorage.setItem("token", res.data.token);
       setUser(res.data);
      
     } catch (e: any) {
-      console.error('Auth error:', e.response?.data || e.message);
+      console.error('Auth error (safe):', e.response?.status || 'Unknown error');
       Alert.alert("Fehler", e.response?.data?.message || "Ein Fehler ist aufgetreten.");
     }
   };
@@ -50,18 +50,35 @@ export default function HomePage() {
       resizeMode="cover"
     >
       <View style={styles.overlay} />
-      <LoginForm
-        isLogin={isLogin}
-        username={username}
-        email={email}
-        password={password}
-        setUsername={setUsername}
-        setEmail={setEmail}
-        setPassword={setPassword}
-        onSubmit={handleAuth}
-        toggleMode={() => setIsLogin((v) => !v)}
-        formOpacity={formOpacity}
-      />
+      
+      {user ? (
+        // Show welcome content when logged in
+        <View style={styles.welcomeContainer}>
+          <Text style={styles.welcomeTitle}>Willkommen, {user.username}!</Text>
+          <Text style={styles.welcomeSubtitle}>
+            Verwalte deine Aufgaben effizient und bleibe produktiv.
+          </Text>
+          <View style={styles.featureList}>
+            <Text style={styles.featureItem}>✅ Todos erstellen und verwalten</Text>
+            <Text style={styles.featureItem}>📊 Fortschritt verfolgen</Text>
+            <Text style={styles.featureItem}>🚀 Produktivität steigern</Text>
+          </View>
+        </View>
+      ) : (
+        // Show login form when not logged in
+        <LoginForm
+          isLogin={isLogin}
+          username={username}
+          email={email}
+          password={password}
+          setUsername={setUsername}
+          setEmail={setEmail}
+          setPassword={setPassword}
+          onSubmit={handleAuth}
+          toggleMode={() => setIsLogin((v) => !v)}
+          formOpacity={formOpacity}
+        />
+      )}
     </ImageBackground>
   );
 }
@@ -80,5 +97,32 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  welcomeContainer: {
+    maxWidth: 400,
+    padding: 32,
+    alignItems: 'center',
+  },
+  welcomeTitle: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#818cf8',
+    textAlign: 'center',
+    marginBottom: 16,
+  },
+  welcomeSubtitle: {
+    fontSize: 18,
+    color: '#ffffff',
+    textAlign: 'center',
+    marginBottom: 32,
+  },
+  featureList: {
+    alignSelf: 'stretch',
+  },
+  featureItem: {
+    fontSize: 16,
+    color: '#ffffff',
+    marginBottom: 12,
+    textAlign: 'center',
   },
 });
