@@ -1,6 +1,6 @@
 // client/app/todos.tsx
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Alert, ActivityIndicator } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Alert, ActivityIndicator, StyleSheet } from "react-native";
 import { AuthContext } from "./_layout";
 import TodoList from "../components/TodoList";
 import axios from "axios";
@@ -87,33 +87,82 @@ export default function TodosPage() {
 
   if (isLoading || isFetchingTodos) {
       return (
-          <View className="flex-1 justify-center items-center bg-gray-900">
+          <View style={styles.loadingContainer}>
               <ActivityIndicator size="large" color="#4F46E5" />
           </View>
       );
   }
 
   return (
-    <View className="flex-1 bg-gray-900 p-6">
-      <Text className="text-3xl font-bold text-indigo-400 mb-6 text-center">
+    <View style={styles.container}>
+      <Text style={styles.title}>
         Deine Todos
       </Text>
-      <View className="flex-row mb-6">
+      <View style={styles.inputContainer}>
         <TextInput
-          className="flex-1 h-12 bg-gray-800 text-white p-3 rounded-l-xl"
+          style={styles.textInput}
           placeholder="Neues To-Do hinzufügen"
           placeholderTextColor="#A0AEC0"
           value={newTodo}
           onChangeText={setNewTodo}
         />
         <TouchableOpacity
-          className="w-12 h-12 bg-indigo-600 rounded-r-xl justify-center items-center shadow-lg"
+          style={styles.addButton}
           onPress={addTodo}
         >
-          <Text className="text-white text-2xl">+</Text>
+          <Text style={styles.addButtonText}>+</Text>
         </TouchableOpacity>
       </View>
       <TodoList todos={todos} onToggle={toggleTodo} onDelete={deleteTodo} />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#111827',
+    padding: 24,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#111827',
+  },
+  title: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: '#818cf8',
+    marginBottom: 24,
+    textAlign: 'center',
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    marginBottom: 24,
+  },
+  textInput: {
+    flex: 1,
+    height: 48,
+    backgroundColor: '#1f2937',
+    color: '#ffffff',
+    padding: 12,
+    borderTopLeftRadius: 12,
+    borderBottomLeftRadius: 12,
+  },
+  addButton: {
+    width: 48,
+    height: 48,
+    backgroundColor: '#4f46e5',
+    borderTopRightRadius: 12,
+    borderBottomRightRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    boxShadow: '0 2px 3px rgba(0, 0, 0, 0.25)',
+    elevation: 5,
+  },
+  addButtonText: {
+    color: '#ffffff',
+    fontSize: 24,
+  },
+});

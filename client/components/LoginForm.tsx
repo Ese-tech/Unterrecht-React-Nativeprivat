@@ -23,11 +23,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#1f2937', // bg-gray-900
     borderRadius: 16,
     padding: 32,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.25,
-    shadowRadius: 20,
+    boxShadow: '0 10px 20px rgba(0, 0, 0, 0.25)',
     elevation: 20,
+  },
+  title: {
+    fontSize: 36,
+    fontWeight: 'bold',
+    color: '#818cf8',
+    marginBottom: 32,
+    textAlign: 'center',
   },
   inputStyle: {
     width: '100%',
@@ -45,11 +49,22 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
-    shadowRadius: 8,
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25)',
     elevation: 8,
+  },
+  buttonText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#ffffff',
+  },
+  toggleButton: {
+    marginTop: 16,
+  },
+  toggleText: {
+    fontSize: 14,
+    color: '#818cf8',
+    textDecorationLine: 'underline',
+    textAlign: 'center',
   },
 });
 
@@ -71,7 +86,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
       { opacity: formOpacity },
     ]}
   >
-    <Text className="text-4xl font-bold text-indigo-400 mb-8 text-center">
+    <Text style={styles.title}>
       {isLogin ? "Login" : "Registrieren"}
     </Text>
     {!isLogin && (
@@ -104,12 +119,12 @@ const LoginForm: React.FC<LoginFormProps> = ({
       style={styles.buttonStyle}
       onPress={onSubmit}
     >
-      <Text className="text-lg font-bold text-white">
+      <Text style={styles.buttonText}>
         {isLogin ? "Anmelden" : "Registrieren"}
       </Text>
     </TouchableOpacity>
-    <TouchableOpacity className="mt-4" onPress={toggleMode}>
-      <Text className="text-sm text-indigo-400 underline text-center">
+    <TouchableOpacity style={styles.toggleButton} onPress={toggleMode}>
+      <Text style={styles.toggleText}>
         {isLogin ? "Noch kein Konto? Registrieren" : "Schon ein Konto? Anmelden"}
       </Text>
     </TouchableOpacity>

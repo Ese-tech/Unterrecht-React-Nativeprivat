@@ -1,7 +1,5 @@
 import React from "react";
-// ❗ RN vs WEB: FlatList statt map() für bessere Performance bei langen Listen
-import { View, Text, TouchableOpacity, FlatList } from "react-native";
-// ❗ RN vs WEB: NativeWind für Tailwind CSS in React Native
+import { View, Text, TouchableOpacity, FlatList, StyleSheet } from "react-native";
 
 interface Todo {
   _id: string;
@@ -14,29 +12,79 @@ interface TodoListProps {
   onDelete: (id: string) => void;
 }
 const TodoList: React.FC<TodoListProps> = ({ todos, onToggle, onDelete }) => (
-  // ❗ RN vs WEB: <FlatList> statt todos.map() - optimiert für Mobile
   <FlatList
     data={todos}
     keyExtractor={(item) => item._id}
     renderItem={({ item }) => (
-      <View className="flex-row items-center bg-gray-800 rounded-xl p-4 mb-3 shadow-md">
+      <View style={styles.todoItem}>
         <TouchableOpacity
-          className="w-8 h-8 rounded-full border-2 border-indigo-400 justify-center items-center"
+          style={styles.checkbox}
           onPress={() => onToggle(item._id, item.completed)}
         >
-          {item.completed && <View className="w-4 h-4 bg-indigo-400 rounded-full" />}
+          {item.completed && <View style={styles.checkboxChecked} />}
         </TouchableOpacity>
-        <Text className={`flex-1 mx-4 text-lg text-white ${item.completed ? "line-through text-gray-500" : ""}`}>
+        <Text style={[styles.todoText, item.completed && styles.completedText]}>
           {item.text}
         </Text>
         <TouchableOpacity
-          className="w-8 h-8 rounded-full bg-red-600 justify-center items-center"
+          style={styles.deleteButton}
           onPress={() => onDelete(item._id)}
         >
-          <Text className="text-white font-bold">x</Text>
+          <Text style={styles.deleteButtonText}>x</Text>
         </TouchableOpacity>
       </View>
     )}
   />
 );
+
+const styles = StyleSheet.create({
+  todoItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#1f2937',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+    boxShadow: '0 2px 3px rgba(0, 0, 0, 0.1)',
+    elevation: 3,
+  },
+  checkbox: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    borderWidth: 2,
+    borderColor: '#818cf8',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  checkboxChecked: {
+    width: 16,
+    height: 16,
+    backgroundColor: '#818cf8',
+    borderRadius: 8,
+  },
+  todoText: {
+    flex: 1,
+    marginHorizontal: 16,
+    fontSize: 18,
+    color: '#ffffff',
+  },
+  completedText: {
+    textDecorationLine: 'line-through',
+    color: '#6b7280',
+  },
+  deleteButton: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#dc2626',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  deleteButtonText: {
+    color: '#ffffff',
+    fontWeight: 'bold',
+  },
+});
+
 export default TodoList;

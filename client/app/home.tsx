@@ -1,7 +1,5 @@
-// client/app/home.tsx
-
 import React, { useState, useContext, useRef } from "react";
-import { View, ImageBackground, Animated, Alert } from "react-native";
+import { View, ImageBackground, Animated, Alert, StyleSheet, Platform } from "react-native";
 import { AuthContext } from "./_layout";
 import LoginForm from "../components/LoginForm";
 import axios from "axios";
@@ -23,35 +21,35 @@ export default function HomePage() {
     Animated.timing(formOpacity, {
       toValue: 1,
       duration: 800,
-      useNativeDriver: true,
+      useNativeDriver: Platform.OS !== 'web', // Disable native driver for web
     }).start();
   }, [formOpacity]);
 
   const handleAuth = async () => {
     try {
-      const endpoint = isLogin ? "signin" : "signup";
-      const body = isLogin ? { email, password } : { username, email, password };
-      const res = await axios.post(`${API_URL}/auth/${endpoint}`, body);
+    const endpoint = isLogin ? "login" : "register";
+    const body = isLogin ? { email, password } : { username, email, password };
+    
+    console.log('Sending request to:', `${API_URL}/auth/${endpoint}`);
+    console.log('Request body:', body);
+    
+    const res = await axios.post(`${API_URL}/auth/${endpoint}`, body);
       await AsyncStorage.setItem("token", res.data.token);
       setUser(res.data);
      
     } catch (e: any) {
+      console.error('Auth error:', e.response?.data || e.message);
       Alert.alert("Fehler", e.response?.data?.message || "Ein Fehler ist aufgetreten.");
     }
   };
 
-  // if (user) {
-  //   navigation.replace("todos");
-  //   return null;
-  // }
-
   return (
     <ImageBackground
       source={require("../assets/images/splash-icon.png")}
-      className="flex-1 justify-center items-center bg-gray-900"
+      style={styles.background}
       resizeMode="cover"
     >
-      <View className="absolute inset-0 bg-black opacity-50" />
+      <View style={styles.overlay} />
       <LoginForm
         isLogin={isLogin}
         username={username}
@@ -67,3 +65,20 @@ export default function HomePage() {
     </ImageBackground>
   );
 }
+
+const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#111827',
+  },
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+});

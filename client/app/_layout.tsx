@@ -1,7 +1,6 @@
 // client/app/_layout.tsx
-import 'nativewind';
-// import '../global.css';
 // import '../dist/output.css';
+// import '../global.css';
 import React, { useState, useEffect, createContext } from "react";
 import { Stack } from "expo-router";
 import Navbar from "../components/Navbar";

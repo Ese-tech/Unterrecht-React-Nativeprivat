@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, StyleSheet } from "react-native";
 import { Link, useRouter } from "expo-router";
 
 interface NavbarProps {
@@ -7,34 +7,53 @@ interface NavbarProps {
   onLogout: () => void;
 }
 const Navbar: React.FC<NavbarProps> = ({ isLoggedIn, onLogout }) => (
-  <View className="flex flex-row gap-x-4 justify-center items-center bg-gray-800 p-4 shadow-xl">
+  <View style={styles.container}>
     <Link href="/home" asChild>
       <Pressable>
-        <Text className="text-lg text-indigo-400 font-bold px-2">Home</Text>
+        <Text style={styles.linkText}>Home</Text>
       </Pressable>
     </Link>
     <Link href="/about" asChild>
       <Pressable>
-        <Text className="text-lg text-indigo-400 font-bold px-2">About</Text>
+        <Text style={styles.linkText}>About</Text>
       </Pressable>
     </Link>
     <Link href="/contact" asChild>
       <Pressable>
-        <Text className="text-lg text-indigo-400 font-bold px-2">Contact</Text>
+        <Text style={styles.linkText}>Contact</Text>
       </Pressable>
     </Link>
     {isLoggedIn && (
       <Link href="/todos" asChild>
         <Pressable>
-          <Text className="text-lg text-indigo-400 font-bold px-2">Todos</Text>
+          <Text style={styles.linkText}>Todos</Text>
         </Pressable>
       </Link>
     )}
     <Pressable onPress={isLoggedIn ? onLogout : undefined}>
-      <Text className={`text-lg font-bold px-2 ${isLoggedIn ? "text-red-400" : "text-green-400"}`}>
+      <Text style={[styles.linkText, { color: isLoggedIn ? '#f87171' : '#10b981' }]}>
         {isLoggedIn ? "Logout" : ""}
       </Text>
     </Pressable>
   </View>
 );
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#1f2937',
+    padding: 16,
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.25)',
+    elevation: 5,
+  },
+  linkText: {
+    fontSize: 18,
+    color: '#818cf8',
+    fontWeight: 'bold',
+    paddingHorizontal: 8,
+  },
+});
+
 export default Navbar;

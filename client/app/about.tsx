@@ -1,15 +1,35 @@
 import React from "react";
-import { View, Text } from "react-native";
-// ❗ RN vs WEB: NativeWind für Tailwind CSS in React Native
+import { View, Text, StyleSheet } from "react-native";
 
 export default function AboutPage() {
   return (
-    <View className="flex-1 justify-center items-center bg-gray-900 p-8">
-      <Text className="text-4xl font-bold text-indigo-400 mb-4">Über Uns</Text>
-      <Text className="text-lg text-white text-center">
+    <View style={styles.container}>
+      <Text style={styles.title}>Über Uns</Text>
+      <Text style={styles.description}>
         Diese App hilft dir, deine täglichen Aufgaben effizient zu verwalten.
         Minimalistisch, produktiv und modern – für deinen Alltag!
       </Text>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#111827',
+    padding: 32,
+  },
+  title: {
+    fontSize: 36,
+    fontWeight: 'bold',
+    color: '#818cf8',
+    marginBottom: 16,
+  },
+  description: {
+    fontSize: 18,
+    color: '#ffffff',
+    textAlign: 'center',
+  },
+});
