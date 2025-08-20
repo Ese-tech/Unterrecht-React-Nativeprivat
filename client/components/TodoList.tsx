@@ -1,3 +1,5 @@
+// client/components/TodoList.tsx
+
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Platform } from "react-native";
 

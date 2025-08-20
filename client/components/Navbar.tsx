@@ -1,3 +1,5 @@
+// client/components/Navbar.tsx
+
 import React from "react";
 import { View, Pressable, Text, StyleSheet, Platform } from "react-native";
 // Let's try importing the router imperative API

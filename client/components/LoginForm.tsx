@@ -1,3 +1,5 @@
+//client/components/LoginForm.tsx
+
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, Animated, StyleSheet, Platform } from "react-native";
 // ❗ RN vs WEB: NativeWind für Tailwind CSS in React Native
